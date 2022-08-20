@@ -1,6 +1,7 @@
 from math import *
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE
+from pptx.enum.dml import MSO_FILL
 from pptx.util import Inches, Cm, Pt
 
 # Cm 단위
@@ -22,14 +23,15 @@ f.close()
 print(t)
 
 # text 임시 설정
-left = top = width = height = Inches(1.5)
+left = top = width = height = Inches(1)
 
 # add TextBox
 textBox = shapes.add_textbox(left, top, width, height)
 textFrame = textBox.text_frame
 
-textFrame.text = t
-#textBox.font.size = Pt(43)
+p = textFrame.add_paragraph()
+p.text = t
+p.font.size = Pt(43)
 
 # shape 임시 설정
 label = "rectangle"
@@ -40,8 +42,12 @@ height = Inches(3)
 # add Shape
 if label == "circle":
     shape = shapes.add_shape(MSO_SHAPE.OVAL, left, top, width, height)
+    shape.fill.solid()
+    shape.fill.type == MSO_FILL.BACKGROUND
 if label == "rectangle":
     shape = shapes.add_shape(MSO_SHAPE.RECTANGLE, left, top, width, height)
+    shape.fill.solid()
+    shape.fill.type == MSO_FILL.SOLID
 if label == "triangle":
     shape = shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE,
                              left, top, width, height)
