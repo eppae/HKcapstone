@@ -1,7 +1,8 @@
 from math import *
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE
-from pptx.enum.dml import MSO_FILL
+from pptx.dml.color import RGBColor
+from pptx.enum.dml import MSO_THEME_COLOR
 from pptx.util import Inches, Cm, Pt
 
 # Cm 단위
@@ -42,18 +43,26 @@ height = Inches(3)
 # add Shape
 if label == "circle":
     shape = shapes.add_shape(MSO_SHAPE.OVAL, left, top, width, height)
-    shape.fill.solid()
-    shape.fill.type == MSO_FILL.BACKGROUND
+    shape.fill.background()
+    line = shape.line
+    line.color.rgb = RGBColor(0, 0, 0)
 if label == "rectangle":
     shape = shapes.add_shape(MSO_SHAPE.RECTANGLE, left, top, width, height)
-    shape.fill.solid()
-    shape.fill.type == MSO_FILL.SOLID
+    shape.fill.background()
+    line = shape.line
+    line.color.rgb = RGBColor(0, 0, 0)
 if label == "triangle":
     shape = shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE,
                              left, top, width, height)
+    shape.fill.background()
+    line = shape.line
+    line.color.rgb = RGBColor(0, 0, 0)
 if label == "pentagon":
     shape = shapes.add_shape(MSO_SHAPE.REGULAR_PENTAGON,
                              left, top, width, height)
+    shape.fill.background()
+    line = shape.line
+    line.color.rgb = RGBColor(0, 0, 0)
 
 # arrow
 
