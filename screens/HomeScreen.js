@@ -10,7 +10,6 @@ function HomeScreen({navigation}) {
     navigation.setOptions({title: 'PPT 변환기'});
   }, [navigation]);
 
-  
   const onSelectImage = () => {
     launchImageLibrary(
       {
@@ -32,6 +31,7 @@ function HomeScreen({navigation}) {
   
   const convertPpt = async ()=>{
     console.log(response);
+    
     let asset = response.assets[0];
     var photo = {
       uri: asset.uri,
@@ -41,7 +41,7 @@ function HomeScreen({navigation}) {
     var body = new FormData();
     body.append('file',photo);
     
-    let res = await fetch('주소',{
+    let res = await fetch('URL',{
       method:'POST',
       body: body,
       headers: {'content-Type': 'multipart/form-data' }
@@ -51,7 +51,6 @@ function HomeScreen({navigation}) {
     console.log(result);
   }
   
-
   return (
     <SafeAreaView>
       <View style={[styles.view]}>
@@ -73,17 +72,18 @@ function HomeScreen({navigation}) {
         </View>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => {
-          if(response == null){
-            Alert.alert('이미지가 없습니다.');
-            console.log('오류 메시지 나타남');
-            return;
-          }
-          else {
-            navigation.navigate('Detail');
-            convertPpt();
-          }
-        }}>
+        // onPress={() => {
+        //   if(response == null){
+        //     Alert.alert('이미지가 없습니다.');
+        //     console.log('오류 메시지 나타남');
+        //     return;
+        //   }
+        //   else {
+        //     navigation.navigate('Detail');
+        //     convertPpt();
+        //   }
+        // }}>
+        onPress={() => {navigation.navigate('Detail');}}>
           <View style={styles.button}>
             <Text style={styles.buttonText}>PPT로 변환하기</Text>
           </View>
