@@ -6,15 +6,19 @@ function DetailScreen({route}) {
   const [response] = useState(null);
 
   const downloadppt = async () => {
-    await RNFetchBlob.config({
-      addAndroidDownloads: {
-        useDownloadManager: true,
-        notification: true,
-        path: `${RNFetchBlob.fs.dirs.DocumentDir}/${file.name}`,
-        description: 'Downloading the file',
-      },
-    })
-    .fetch('GET','URL'+ file.url);
+    try{
+      await RNFetchBlob.config({
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          notification: true,
+          path: `${RNFetchBlob.fs.dirs.DocumentDir}/${file.name}`,
+          description: 'Downloading the file',
+        },
+      })
+      config(options).fetch('GET','URL');
+    } catch(error){
+      console.log('fail download');
+    }
   };
 
   return (
@@ -22,11 +26,11 @@ function DetailScreen({route}) {
       <TouchableOpacity
         onPress={() => {
           downloadppt();
-          if(response == null){
-            console.log('오류 메시지');
-            Alert.alert('변환에 실패하였습니다.');
-            return;
-          }
+          // if(response == null){
+          //   console.log('오류 메시지');
+          //   Alert.alert('변환에 실패하였습니다.');
+          //   return;
+          // }
         }}>
         <View style={styles.button}>
           <Text style={styles.buttonText}>PPT 저장하기</Text>
