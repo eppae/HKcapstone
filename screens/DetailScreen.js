@@ -18,7 +18,7 @@ function DetailScreen({route}) {
           description: 'Downloading the file',
         },
       })
-      .fetch('GET','https://2vx2xvoam5.execute-api.us-west-2.amazonaws.com/v2/uploadppt',
+      .fetch('GET','URL',
       {
         "Content-Type": "multipart/form-data",
         // body: body,
