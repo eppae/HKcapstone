@@ -6,18 +6,26 @@ function DetailScreen({route}) {
   const [response] = useState(null);
 
   const downloadppt = async () => {
+    //var body = new FormData();
     try{
       await RNFetchBlob.config({
         addAndroidDownloads: {
           useDownloadManager: true,
           notification: true,
-          path: `${RNFetchBlob.fs.dirs.DocumentDir}/${file.name}`,
+          wifiOnly: true,
+          appendExt: 'pptx',
+          path: `${RNFetchBlob.fs.dirs.DownloadDir}/${file.name}`,
           description: 'Downloading the file',
         },
       })
-      config(options).fetch('GET','URL');
+      .fetch('GET','https://2vx2xvoam5.execute-api.us-west-2.amazonaws.com/v2/uploadppt',
+      {
+        "Content-Type": "multipart/form-data",
+        // body: body,
+      });
     } catch(error){
       console.log('fail download');
+      console.log(error);
     }
   };
 
@@ -26,11 +34,6 @@ function DetailScreen({route}) {
       <TouchableOpacity
         onPress={() => {
           downloadppt();
-          // if(response == null){
-          //   console.log('오류 메시지');
-          //   Alert.alert('변환에 실패하였습니다.');
-          //   return;
-          // }
         }}>
         <View style={styles.button}>
           <Text style={styles.buttonText}>PPT 저장하기</Text>

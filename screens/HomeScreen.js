@@ -41,7 +41,7 @@ function HomeScreen({navigation}) {
     var body = new FormData();
     body.append('file',photo);
     
-    let res = await fetch('URL',{
+    let res = await fetch('https://2vx2xvoam5.execute-api.us-west-2.amazonaws.com/v2/uploadimage',{
       method:'POST',
       body: body,
       headers: {'content-Type': 'multipart/form-data' }
