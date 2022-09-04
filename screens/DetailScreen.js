@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Alert, PermissionsAndroid} from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 
 function DetailScreen({route}) {
   const [response] = useState(null);
-
   const downloadppt = async () => {
-    //var body = new FormData();
     try{
       await RNFetchBlob.config({
         addAndroidDownloads: {
           useDownloadManager: true,
           notification: true,
-          wifiOnly: true,
           appendExt: 'pptx',
           path: `${RNFetchBlob.fs.dirs.DownloadDir}/${file.name}`,
           description: 'Downloading the file',
@@ -29,11 +26,25 @@ function DetailScreen({route}) {
     }
   };
 
+  const downloadFile = async() => {
+    try{
+      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        downloadppt();
+      } else {
+        Alert.alert('Permission Denied', 'You need to give storage permission to download the file');
+      } 
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
   return (
     <View style={styles.block}>
       <TouchableOpacity
         onPress={() => {
-          downloadppt();
+          downloadFile();
         }}>
         <View style={styles.button}>
           <Text style={styles.buttonText}>PPT 저장하기</Text>
