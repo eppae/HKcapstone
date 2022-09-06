@@ -1,0 +1,521 @@
+{
+    "info": {
+        "name": "한글 손글씨 데이터",
+        "date_created": "2019-08-24 20:06:53"
+    },
+    "images": [
+        {
+            "id": "00000001",
+            "width": 332,
+            "height": 227,
+            "file_name": "00000001.png"
+        },
+        {
+            "id": "00000002",
+            "width": 333,
+            "height": 227,
+            "file_name": "00000002.png"
+        },
+        {
+            "id": "00000003",
+            "width": 333,
+            "height": 227,
+            "file_name": "00000003.png"
+        },
+        {
+            "id": "00000004",
+            "width": 696,
+            "height": 227,
+            "file_name": "00000004.png"
+        },
+        {
+            "id": "00000005",
+            "width": 453,
+            "height": 227,
+            "file_name": "00000005.png"
+        },
+        {
+            "id": "00000006",
+            "width": 454,
+            "height": 227,
+            "file_name": "00000006.png"
+        },
+        {
+            "id": "00000007",
+            "width": 453,
+            "height": 227,
+            "file_name": "00000007.png"
+        },
+        {
+            "id": "00000008",
+            "width": 333,
+            "height": 227,
+            "file_name": "00000008.png"
+        },
+        {
+            "id": "00000009",
+            "width": 332,
+            "height": 227,
+            "file_name": "00000009.png"
+        },
+        {
+            "id": "00000010",
+            "width": 575,
+            "height": 227,
+            "file_name": "00000010.png"
+        },
+        {
+            "id": "00000011",
+            "width": 454,
+            "height": 227,
+            "file_name": "00000011.png"
+        },
+        {
+            "id": "00000012",
+            "width": 332,
+            "height": 227,
+            "file_name": "00000012.png"
+        },
+        {
+            "id": "00000013",
+            "width": 453,
+            "height": 227,
+            "file_name": "00000013.png"
+        },
+        {
+            "id": "00000014",
+            "width": 575,
+            "height": 227,
+            "file_name": "00000014.png"
+        },
+        {
+            "id": "00000015",
+            "width": 696,
+            "height": 227,
+            "file_name": "00000015.png"
+        },
+        {
+            "id": "00000016",
+            "width": 332,
+            "height": 227,
+            "file_name": "00000016.png"
+        },
+        {
+            "id": "00000017",
+            "width": 333,
+            "height": 227,
+            "file_name": "00000017.png"
+        },
+        {
+            "id": "00000018",
+            "width": 575,
+            "height": 227,
+            "file_name": "00000018.png"
+        },
+        {
+            "id": "00000019",
+            "width": 454,
+            "height": 227,
+            "file_name": "00000019.png"
+        },
+        {
+            "id": "00000020",
+            "width": 575,
+            "height": 227,
+            "file_name": "00000020.png"
+        },
+        {
+            "id": "00000021",
+            "width": 575,
+            "height": 227,
+            "file_name": "00000021.png"
+        },
+        {
+            "id": "00000022",
+            "width": 333,
+            "height": 227,
+            "file_name": "00000022.png"
+        },
+        {
+            "id": "00000023",
+            "width": 332,
+            "height": 227,
+            "file_name": "00000023.png"
+        },
+        {
+            "id": "00000024",
+            "width": 454,
+            "height": 227,
+            "file_name": "00000024.png"
+        },
+        {
+            "id": "00000025",
+            "width": 575,
+            "height": 227,
+            "file_name": "00000025.png"
+        },
+        {
+            "id": "00000026",
+            "width": 454,
+            "height": 227,
+            "file_name": "00000026.png"
+        },
+        {
+            "id": "00000027",
+            "width": 332,
+            "height": 227,
+            "file_name": "00000027.png"
+        },
+        {
+            "id": "00000028",
+            "width": 454,
+            "height": 227,
+            "file_name": "00000028.png"
+        },
+        {
+            "id": "00000029",
+            "width": 575,
+            "height": 227,
+            "file_name": "00000029.png"
+        },
+        {
+            "id": "00000030",
+            "width": 454,
+            "height": 227,
+            "file_name": "00000030.png"
+        }
+    ],
+    "annotations": [
+        {
+            "id": "00000001",
+            "image_id": "00000001",
+            "text": "가게",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000002",
+            "image_id": "00000002",
+            "text": "가격",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000003",
+            "image_id": "00000003",
+            "text": "가구",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000004",
+            "image_id": "00000004",
+            "text": "가까워지다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000005",
+            "image_id": "00000005",
+            "text": "가까이",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000006",
+            "image_id": "00000006",
+            "text": "가깝다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000007",
+            "image_id": "00000007",
+            "text": "가꾸다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000008",
+            "image_id": "00000008",
+            "text": "가끔",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000009",
+            "image_id": "00000009",
+            "text": "가난",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000010",
+            "image_id": "00000010",
+            "text": "가난하다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000011",
+            "image_id": "00000011",
+            "text": "가늘다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000012",
+            "image_id": "00000012",
+            "text": "가능",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000013",
+            "image_id": "00000013",
+            "text": "가능성",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000014",
+            "image_id": "00000014",
+            "text": "가능하다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000015",
+            "image_id": "00000015",
+            "text": "가능해지다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000016",
+            "image_id": "00000016",
+            "text": "가다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000017",
+            "image_id": "00000017",
+            "text": "가득",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000018",
+            "image_id": "00000018",
+            "text": "가득하다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000019",
+            "image_id": "00000019",
+            "text": "가득히",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000020",
+            "image_id": "00000020",
+            "text": "가라앉다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000021",
+            "image_id": "00000021",
+            "text": "가려지다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000022",
+            "image_id": "00000022",
+            "text": "가령",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000023",
+            "image_id": "00000023",
+            "text": "가로",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000024",
+            "image_id": "00000024",
+            "text": "가로등",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000025",
+            "image_id": "00000025",
+            "text": "가로막다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000026",
+            "image_id": "00000026",
+            "text": "가로수",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000027",
+            "image_id": "00000027",
+            "text": "가루",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000028",
+            "image_id": "00000028",
+            "text": "가르다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000029",
+            "image_id": "00000029",
+            "text": "가르치다",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        },
+        {
+            "id": "00000030",
+            "image_id": "00000030",
+            "text": "가르침",
+            "attributes": {
+                "type": "단어(어절)",
+                "gender": "여",
+                "age": "29",
+                "job": "회사원"
+            }
+        }
+    ],
+    "licenses": []
+}

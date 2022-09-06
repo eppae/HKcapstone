@@ -1,0 +1,492 @@
+{
+    "info": {
+        "name": "Korean OCR Data Set (Sample)",
+        "description": "Korean OCR Data Set (Printed Text, Sample)",
+        "date_created": "2019-08-22 14:15:53"
+    },
+    "images": [
+        {
+            "id": "00000000",
+            "width": 118,
+            "height": 110,
+            "file_name": "00000000.png",
+            "date_captured": "2019-07-30 16:29:37"
+        },
+        {
+            "id": "00000001",
+            "width": 118,
+            "height": 108,
+            "file_name": "00000001.png",
+            "date_captured": "2019-07-30 16:29:37"
+        },
+        {
+            "id": "00000002",
+            "width": 117,
+            "height": 109,
+            "file_name": "00000002.png",
+            "date_captured": "2019-07-30 16:29:37"
+        },
+        {
+            "id": "00000003",
+            "width": 117,
+            "height": 104,
+            "file_name": "00000003.png",
+            "date_captured": "2019-07-30 16:29:37"
+        },
+        {
+            "id": "00000004",
+            "width": 113,
+            "height": 103,
+            "file_name": "00000004.png",
+            "date_captured": "2019-07-30 16:29:37"
+        },
+        {
+            "id": "00000005",
+            "width": 112,
+            "height": 106,
+            "file_name": "00000005.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000006",
+            "width": 119,
+            "height": 109,
+            "file_name": "00000006.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000007",
+            "width": 117,
+            "height": 106,
+            "file_name": "00000007.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000008",
+            "width": 111,
+            "height": 106,
+            "file_name": "00000008.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000009",
+            "width": 112,
+            "height": 107,
+            "file_name": "00000009.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000010",
+            "width": 116,
+            "height": 102,
+            "file_name": "00000010.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000011",
+            "width": 118,
+            "height": 107,
+            "file_name": "00000011.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000012",
+            "width": 117,
+            "height": 108,
+            "file_name": "00000012.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000013",
+            "width": 118,
+            "height": 103,
+            "file_name": "00000013.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000014",
+            "width": 117,
+            "height": 108,
+            "file_name": "00000014.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000015",
+            "width": 117,
+            "height": 109,
+            "file_name": "00000015.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000016",
+            "width": 117,
+            "height": 106,
+            "file_name": "00000016.png",
+            "date_captured": "2019-07-30 16:29:38"
+        },
+        {
+            "id": "00000017",
+            "width": 114,
+            "height": 103,
+            "file_name": "00000017.png",
+            "date_captured": "2019-07-30 16:29:39"
+        },
+        {
+            "id": "00000018",
+            "width": 114,
+            "height": 105,
+            "file_name": "00000018.png",
+            "date_captured": "2019-07-30 16:29:39"
+        },
+        {
+            "id": "00000019",
+            "width": 118,
+            "height": 110,
+            "file_name": "00000019.png",
+            "date_captured": "2019-07-30 16:29:39"
+        },
+        {
+            "id": "00000020",
+            "width": 118,
+            "height": 111,
+            "file_name": "00000020.png",
+            "date_captured": "2019-07-30 16:29:39"
+        },
+        {
+            "id": "00000021",
+            "width": 108,
+            "height": 103,
+            "file_name": "00000021.png",
+            "date_captured": "2019-07-30 16:29:39"
+        },
+        {
+            "id": "00000022",
+            "width": 118,
+            "height": 110,
+            "file_name": "00000022.png",
+            "date_captured": "2019-07-30 16:29:39"
+        },
+        {
+            "id": "00000023",
+            "width": 119,
+            "height": 109,
+            "file_name": "00000023.png",
+            "date_captured": "2019-07-30 16:29:39"
+        },
+        {
+            "id": "00000024",
+            "width": 117,
+            "height": 108,
+            "file_name": "00000024.png",
+            "date_captured": "2019-07-30 16:29:39"
+        },
+        {
+            "id": "00000025",
+            "width": 115,
+            "height": 106,
+            "file_name": "00000025.png",
+            "date_captured": "2019-07-30 16:29:39"
+        },
+        {
+            "id": "00000026",
+            "width": 118,
+            "height": 106,
+            "file_name": "00000026.png",
+            "date_captured": "2019-07-30 16:29:39"
+        },
+        {
+            "id": "00000027",
+            "width": 108,
+            "height": 104,
+            "file_name": "00000027.png",
+            "date_captured": "2019-07-30 16:29:40"
+        },
+        {
+            "id": "00000028",
+            "width": 118,
+            "height": 109,
+            "file_name": "00000028.png",
+            "date_captured": "2019-07-30 16:29:40"
+        },
+        {
+            "id": "00000029",
+            "width": 108,
+            "height": 108,
+            "file_name": "00000029.png",
+            "date_captured": "2019-07-30 16:29:40"
+        }
+    ],
+    "annotations": [
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000000",
+            "image_id": "00000000",
+            "text": "가"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000001",
+            "image_id": "00000001",
+            "text": "각"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000002",
+            "image_id": "00000002",
+            "text": "갂"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000003",
+            "image_id": "00000003",
+            "text": "갃"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000004",
+            "image_id": "00000004",
+            "text": "간"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000005",
+            "image_id": "00000005",
+            "text": "갅"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000006",
+            "image_id": "00000006",
+            "text": "갆"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000007",
+            "image_id": "00000007",
+            "text": "갇"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000008",
+            "image_id": "00000008",
+            "text": "갈"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000009",
+            "image_id": "00000009",
+            "text": "갉"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000010",
+            "image_id": "00000010",
+            "text": "갊"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000011",
+            "image_id": "00000011",
+            "text": "갋"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000012",
+            "image_id": "00000012",
+            "text": "갌"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000013",
+            "image_id": "00000013",
+            "text": "갍"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000014",
+            "image_id": "00000014",
+            "text": "갎"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000015",
+            "image_id": "00000015",
+            "text": "갏"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000016",
+            "image_id": "00000016",
+            "text": "감"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000017",
+            "image_id": "00000017",
+            "text": "갑"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000018",
+            "image_id": "00000018",
+            "text": "값"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000019",
+            "image_id": "00000019",
+            "text": "갓"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000020",
+            "image_id": "00000020",
+            "text": "갔"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000021",
+            "image_id": "00000021",
+            "text": "강"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000022",
+            "image_id": "00000022",
+            "text": "갖"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000023",
+            "image_id": "00000023",
+            "text": "갗"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000024",
+            "image_id": "00000024",
+            "text": "갘"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000025",
+            "image_id": "00000025",
+            "text": "같"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000026",
+            "image_id": "00000026",
+            "text": "갚"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000027",
+            "image_id": "00000027",
+            "text": "갛"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000028",
+            "image_id": "00000028",
+            "text": "개"
+        },
+        {
+            "attributes": {
+                "font": "굴림",
+                "type": "글자(음절)"
+            },
+            "id": "00000029",
+            "image_id": "00000029",
+            "text": "객"
+        }
+    ],
+    "licenses": []
+}
