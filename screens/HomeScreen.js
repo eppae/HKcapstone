@@ -41,7 +41,7 @@ function HomeScreen({navigation}) {
     var body = new FormData();
     body.append('file',photo);
     
-    let res = await fetch('URL',{
+    let res = await fetch('https://15zytiytli.execute-api.us-west-2.amazonaws.com/v2/uploadimage',{
       method:'POST',
       body: body,
       headers: {'content-Type': 'multipart/form-data' }
@@ -72,18 +72,18 @@ function HomeScreen({navigation}) {
         </View>
       </TouchableOpacity>
       <TouchableOpacity
-        // onPress={() => {
-        //   if(response == null){
-        //     Alert.alert('이미지가 없습니다.');
-        //     console.log('오류 메시지 나타남');
-        //     return;
-        //   }
-        //   else {
-        //     navigation.navigate('Detail');
-        //     convertPpt();
-        //   }
-        // }}>
-        onPress={() => {navigation.navigate('Detail');}}>
+        onPress={() => {
+          if(response == null){
+            Alert.alert('이미지가 없습니다.');
+            console.log('오류 메시지 나타남');
+            return;
+          }
+          else {
+            navigation.navigate('Detail');
+            convertPpt();
+          }
+        }}>
+        {/* onPress={() => {navigation.navigate('Detail');}} */}
           <View style={styles.button}>
             <Text style={styles.buttonText}>PPT로 변환하기</Text>
           </View>

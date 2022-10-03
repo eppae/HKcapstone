@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Alert, PermissionsAndroid} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Alert, PermissionsAndroid, Linking } from 'react-native';
 import RNFetchBlob from 'rn-fetch-blob';
 
 function DetailScreen({route}) {
   const [response] = useState(null);
   const downloadppt = async () => {
     try{
-      await RNFetchBlob.config({
-        addAndroidDownloads: {
-          useDownloadManager: true,
-          notification: true,
-          appendExt: 'pptx',
-          path: `${RNFetchBlob.fs.dirs.DownloadDir}/${file.name}`,
-          description: 'Downloading the file',
-        },
+
+      let res = await fetch('URL', {
+        method: 'GET'
       })
-      .fetch('GET','URL',
-      {
-        "Content-Type": "multipart/form-data",
-        // body: body,
-      });
+      let result = await res.json();
+      console.log(result);
+      let ppturl = result.body.URL;
+      console.log(ppturl);
+      Linking.openURL(ppturl);
+      // await RNFetchBlob.config({
+      //   addAndroidDownloads: {
+      //     useDownloadManager: true,
+      //     notification: true,
+      //     appendExt: 'pptx',
+      //     path: `${RNFetchBlob.fs.dirs.DownloadDir}/${file.name}`,
+      //     description: 'Downloading the file',
+      //   },
+      // })
+      // .fetch('GET','https://15zytiytli.execute-api.us-west-2.amazonaws.com/v2/uploadppt',
+      // {
+      //   "Content-Type": "multipart/form-data",
+      //   body: body,
+      // });
+
     } catch(error){
       console.log('fail download');
       console.log(error);
