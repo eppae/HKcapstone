@@ -2,7 +2,6 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/6.jpg')
-img_temp = cv2.imread('D:/practice/contour/sample_images/sample_ppt/6.jpg')
 from PIL import Image
 coordinate=[]
 import os
@@ -44,7 +43,7 @@ def morphology(image):
 
 
         coordinate.append([f'{k}.jpg', x, y, w, h])
-        
+
 
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 2)
         cropped_image = erode[y:y + h, x:x + w]
@@ -134,8 +133,8 @@ def findpixel():
     avg_density = 0
     relative_density = 0
     for n in range(9):
-        img_temp = cv2.imread(f'D:/practice/contour/sample_images/crop/0000{n}.jpg')
-        img_gray = cv2.cvtColor(img_temp, cv2.COLOR_BGR2GRAY)
+        img = cv2.imread(f'D:/practice/contour/sample_images/crop/0000{n}.jpg')
+        img_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         hitrate = 0
         density = 0
         plt.show()
@@ -179,8 +178,6 @@ def findpixel():
 
 #contour()
 morphology(img)
-
-
 #image_crop(f'D:/practice/contour/sample_images/result/7.jpg', 'D:/practice/contour/sample_images/crop/')
 #findpixel_test()
 
