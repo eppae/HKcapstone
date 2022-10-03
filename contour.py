@@ -149,8 +149,6 @@ def findpixel():
         img_gray = cv2.cvtColor(img_temp, cv2.COLOR_BGR2GRAY)
         hitrate = 0
         density = 0
-        sns.heatmap(img_gray[:9, :10], annot=True, fmt="d", cmap=plt.cm.bone)
-        plt.axis("off")
         plt.show()
         height, width = img_gray.shape
         for j in range(height):
@@ -161,82 +159,34 @@ def findpixel():
                 else:
                     img_gray[j, i] = 255
 
-        sns.heatmap(img_gray[:9, :10], annot=True, fmt="d", cmap=plt.cm.bone)
-        plt.axis("off")
-        plt.show()
+
         density = hitrate / (height * width)
         avg_density = avg_density + density
-        print('밀도: ', density)
+       # print('밀도: ', density)
         density_list.append(density)
     avg_density = avg_density / 9
-    print('평균밀도', avg_density)
+    #print('평균밀도', avg_density)
     m = 0
     for m in range(9):
         relative_density = density_list[m] - avg_density
-        print(relative_density)
+
+       # print(relative_density)
         if relative_density > 0.082:
             high_density = high_density + 1
         elif relative_density < -0.08:
             low_density = low_density + 1
         else:
             medium_density = medium_density + 1
-
     print('high: ', high_density, 'medium: ', medium_density, 'low: ', low_density)
     if high_density == 4 and medium_density== 4 and low_density == 1:
-        print("result: 사각형")
+        coordinate[f].append("사각형")
+        print(coordinate[f])
     elif high_density == 3 and medium_density== 3 and low_density == 3:
-        print("result: 삼각형")
+        coordinate[f].append("삼각형")
+        print(coordinate[f])
     elif high_density == 2 and medium_density ==6 and low_density == 1:
-        print("result: 원")
-
-def findpixel_test():
-    n = 0
-    density_list=[]
-    high_density = 0
-    medium_density = 0
-    low_density = 0
-    avg_density = 0
-    relative_density = 0
-    for n in range(9):
-        img_temp = cv2.imread(f'D:/practice/contour/sample_images/crop/0000{n}.jpg')
-        img_gray = cv2.cvtColor(img_temp, cv2.COLOR_BGR2GRAY)
-        hitrate=0
-        density=0
-        sns.heatmap(img_gray[:9, :10], annot=True, fmt="d", cmap=plt.cm.bone)
-        plt.axis("off")
-        plt.show()
-        height, width = img_gray.shape
-        for j in range(height):
-            for i in range(width):
-                if (img_gray[j,i] < 128):
-                    img_gray[j, i] = 0
-                    hitrate=hitrate+1
-                else:
-                    img_gray[j,i] = 255
-
-        sns.heatmap(img_gray[:9, :10], annot=True, fmt="d", cmap=plt.cm.bone)
-        plt.axis("off")
-        plt.show()
-        density=hitrate/(height*width)
-        avg_density=avg_density+density
-        print('밀도: ', density)
-        density_list.append(density)
-    avg_density = avg_density/9
-    print('평균밀도', avg_density)
-    m=0
-    for m in range(9):
-        relative_density = density_list[m]-avg_density
-        print(relative_density)
-        if relative_density > 0.08:
-            high_density=high_density+1
-        elif relative_density < -0.1:
-            low_density=low_density+1
-        else:
-            medium_density=medium_density+1
-
-    print('high: ', high_density, 'medium: ', medium_density, 'low: ', low_density)
-
-
+        coordinate[f].append("원")
+        print(coordinate[f])
 
 #contour()
 morphology(img)
@@ -245,10 +195,10 @@ morphology(img)
 #image_crop(f'D:/practice/contour/sample_images/result/7.jpg', 'D:/practice/contour/sample_images/crop/')
 #findpixel_test()
 
-n=0
-for n in range(len(os.listdir('D:/practice/contour/sample_images/result/'))):
-    image_crop(f'D:/practice/contour/sample_images/result/{n+1}.jpg', 'D:/practice/contour/sample_images/crop/')
-    print(f'D:/practice/contour/sample_images/result/{n+1}.jpg')
+f=0
+for f in range(len(os.listdir('D:/practice/contour/sample_images/result/'))):
+    image_crop(f'D:/practice/contour/sample_images/result/{f+1}.jpg', 'D:/practice/contour/sample_images/crop/')
+    print(f'D:/practice/contour/sample_images/result/{f+1}.jpg')
     findpixel()
 
 
