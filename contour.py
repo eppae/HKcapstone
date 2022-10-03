@@ -1,8 +1,15 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
-img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/4.jpg')
-img_temp = cv2.imread('D:/practice/contour/sample_images/sample_ppt/4.jpg')
+img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/6.jpg')
+img_temp = cv2.imread('D:/practice/contour/sample_images/sample_ppt/6.jpg')
+from PIL import Image
+coordinate=[]
+import os
+import scipy as sp
+import matplotlib.pylab as plt
+import seaborn as sns
+
 def morphology(image):
     k = 0
 
@@ -32,17 +39,22 @@ def morphology(image):
 
 
         if w < 30 and h < 30:
-            print([x, y, w, h])
             continue
         k = k + 1
+
+
+        coordinate.append([f'{k}.jpg', x, y, w, h])
+        print(coordinate)
+
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 2)
-        cropped_image = img[y:y + h, x:x + w]
-        resize = cv2.resize(cropped_image, dsize=(28, 28), interpolation=cv2.INTER_AREA)
+        cropped_image = erode[y:y + h, x:x + w]
+        resize = cv2.resize(cropped_image, dsize=(28,28), interpolation=cv2.INTER_AREA)
         cv2.imwrite(f'D:/practice/contour/sample_images/result/{k}.jpg', resize)
 
-    cv2.imshow('captcha_result', img)
-    cv2.waitKey(0)
-    cv2.destroyALLWindows()
+    print(coordinate)
+   # cv2.imshow('captcha_result', img)
+   # cv2.waitKey(0)
+   # cv2.destroyALLWindows()
 
 def size_down(image):
     global img
@@ -97,10 +109,146 @@ def gaussianfilter():
     cv2.destroyALLWindows()
 
 
+def image_crop(infilename, save_path):
+        img = Image.open(infilename)
+        (img_h, img_w) = img.size
+
+
+        # crop 할 사이즈 : grid_w, grid_h
+        grid_w = 9.3  # crop width
+        grid_h = 9.3  # crop height
+        range_w = (int)(img_w / grid_w)
+        range_h = (int)(img_h / grid_h)
+
+
+        i = 0
+
+        for w in range(range_w):
+            for h in range(range_h):
+                bbox = (h * grid_h, w * grid_w, (h + 1) * (grid_h), (w + 1) * (grid_w))
+
+                # 가로 세로 시작, 가로 세로 끝
+                crop_img = img.crop(bbox)
+
+                fname = "{}.jpg".format("{0:05d}".format(i))
+                savename = save_path + fname
+                crop_img.save(savename)
+
+                i += 1
+
+def findpixel():
+    n = 0
+    density_list = []
+    high_density = 0
+    medium_density = 0
+    low_density = 0
+    avg_density = 0
+    relative_density = 0
+    for n in range(9):
+        img_temp = cv2.imread(f'D:/practice/contour/sample_images/crop/0000{n}.jpg')
+        img_gray = cv2.cvtColor(img_temp, cv2.COLOR_BGR2GRAY)
+        hitrate = 0
+        density = 0
+        sns.heatmap(img_gray[:9, :10], annot=True, fmt="d", cmap=plt.cm.bone)
+        plt.axis("off")
+        plt.show()
+        height, width = img_gray.shape
+        for j in range(height):
+            for i in range(width):
+                if (img_gray[j, i] < 128):
+                    img_gray[j, i] = 0
+                    hitrate = hitrate + 1
+                else:
+                    img_gray[j, i] = 255
+
+        sns.heatmap(img_gray[:9, :10], annot=True, fmt="d", cmap=plt.cm.bone)
+        plt.axis("off")
+        plt.show()
+        density = hitrate / (height * width)
+        avg_density = avg_density + density
+        print('밀도: ', density)
+        density_list.append(density)
+    avg_density = avg_density / 9
+    print('평균밀도', avg_density)
+    m = 0
+    for m in range(9):
+        relative_density = density_list[m] - avg_density
+        print(relative_density)
+        if relative_density > 0.082:
+            high_density = high_density + 1
+        elif relative_density < -0.08:
+            low_density = low_density + 1
+        else:
+            medium_density = medium_density + 1
+
+    print('high: ', high_density, 'medium: ', medium_density, 'low: ', low_density)
+    if high_density == 4 and medium_density== 4 and low_density == 1:
+        print("result: 사각형")
+    elif high_density == 3 and medium_density== 3 and low_density == 3:
+        print("result: 삼각형")
+    elif high_density == 2 and medium_density ==6 and low_density == 1:
+        print("result: 원")
+
+def findpixel_test():
+    n = 0
+    density_list=[]
+    high_density = 0
+    medium_density = 0
+    low_density = 0
+    avg_density = 0
+    relative_density = 0
+    for n in range(9):
+        img_temp = cv2.imread(f'D:/practice/contour/sample_images/crop/0000{n}.jpg')
+        img_gray = cv2.cvtColor(img_temp, cv2.COLOR_BGR2GRAY)
+        hitrate=0
+        density=0
+        sns.heatmap(img_gray[:9, :10], annot=True, fmt="d", cmap=plt.cm.bone)
+        plt.axis("off")
+        plt.show()
+        height, width = img_gray.shape
+        for j in range(height):
+            for i in range(width):
+                if (img_gray[j,i] < 128):
+                    img_gray[j, i] = 0
+                    hitrate=hitrate+1
+                else:
+                    img_gray[j,i] = 255
+
+        sns.heatmap(img_gray[:9, :10], annot=True, fmt="d", cmap=plt.cm.bone)
+        plt.axis("off")
+        plt.show()
+        density=hitrate/(height*width)
+        avg_density=avg_density+density
+        print('밀도: ', density)
+        density_list.append(density)
+    avg_density = avg_density/9
+    print('평균밀도', avg_density)
+    m=0
+    for m in range(9):
+        relative_density = density_list[m]-avg_density
+        print(relative_density)
+        if relative_density > 0.08:
+            high_density=high_density+1
+        elif relative_density < -0.1:
+            low_density=low_density+1
+        else:
+            medium_density=medium_density+1
+
+    print('high: ', high_density, 'medium: ', medium_density, 'low: ', low_density)
+
 
 
 #contour()
 morphology(img)
 
+
+#image_crop(f'D:/practice/contour/sample_images/result/7.jpg', 'D:/practice/contour/sample_images/crop/')
+#findpixel_test()
+
+n=0
+for n in range(len(os.listdir('D:/practice/contour/sample_images/result/'))):
+    image_crop(f'D:/practice/contour/sample_images/result/{n+1}.jpg', 'D:/practice/contour/sample_images/crop/')
+    print(f'D:/practice/contour/sample_images/result/{n+1}.jpg')
+    findpixel()
 
 

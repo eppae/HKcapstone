@@ -31,7 +31,7 @@ def getAllOverlaps(boxes, bounds, index):
     return overlaps;
 
 
-img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/1.jpg')
+img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/6.jpg')
 orig = np.copy(img);
 blue, green, red = cv2.split(img)
 

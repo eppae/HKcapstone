@@ -9,17 +9,17 @@ def preprocessing(image):
     k = 0
     bboxes = {}
 
-    blur = cv2.GaussianBlur(image, (5, 5), 0)
+    blur = cv2.GaussianBlur(image, (3, 3), 0)
     imgray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
-    th1 = cv2.adaptiveThreshold(imgray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 8)  # gaussian
-    kernel = np.ones((3,3) ,np.uint8)
+    th1 = cv2.adaptiveThreshold(imgray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 10, 8)  # gaussian
+    kernel = np.ones((4,4) ,np.uint8)
     erode = cv2.erode(th1, kernel, iterations=8)
     contours, high =cv2.findContours(erode, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     for contour in contours:
 
         [x, y, w, h] = cv2.boundingRect(contour)
-        if w < 30 and h < 30:
+        if w < 30 and h < 40:
             continue
 
         k = k + 1
