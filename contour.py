@@ -22,14 +22,14 @@ def morphology(image):
     opening = cv2.morphologyEx(th1, cv2.MORPH_OPEN, kernel)
     close = cv2.morphologyEx(th1, cv2.MORPH_CLOSE, kernel)
 
-    titles = ['Original', 'Erode','Diliation', 'Opening', 'Close']
-    images = [image, erode,diliation,opening,close]
+   # titles = ['Original', 'Erode','Diliation', 'Opening', 'Close']
+    #images = [image, erode,diliation,opening,close]
 
-    for i in range(5):
-        plt.subplot(2, 3, i + 1), plt.imshow(images[i], 'gray')
-        plt.title(titles[i])
-        plt.xticks([]), plt.yticks([])
-    plt.show()
+    #for i in range(5):
+      #  plt.subplot(2, 3, i + 1), plt.imshow(images[i], 'gray')
+       # plt.title(titles[i])
+       # plt.xticks([]), plt.yticks([])
+    #plt.show()
 
     contours, high =cv2.findContours(erode, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     for contour in contours:
@@ -44,7 +44,7 @@ def morphology(image):
 
 
         coordinate.append([f'{k}.jpg', x, y, w, h])
-        print(coordinate)
+        
 
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 2)
         cropped_image = erode[y:y + h, x:x + w]
@@ -96,17 +96,6 @@ def contour():
     cv2.waitKey(0)
     cv2.destroyALLWindows()
 
-def gaussianfilter():
-    sigma=1
-    dst = cv2.GaussianBlur(img, (0, 0), sigma)
-
-    desc = 'sigma = {}'.format(sigma)
-    cv2.putText(dst, desc, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                    1.0, 255, 1, cv2.LINE_AA)
-
-    cv2.imshow('dst', dst)
-    cv2.waitKey()
-    cv2.destroyALLWindows()
 
 
 def image_crop(infilename, save_path):
