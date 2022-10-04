@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
-img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/6.jpg')
+img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/7.jpg')
 from PIL import Image
 coordinate=[]
 import os
@@ -47,7 +47,9 @@ def morphology(image):
 
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 2)
         cropped_image = erode[y:y + h, x:x + w]
+        original_image = imgray[y: y + h, x: x + w]
         resize = cv2.resize(cropped_image, dsize=(28,28), interpolation=cv2.INTER_AREA)
+        cv2.imwrite(f'D:/practice/contour/sample_images/original_result/{k}.jpg',original_image)
         cv2.imwrite(f'D:/practice/contour/sample_images/result/{k}.jpg', resize)
 
     print(coordinate)
@@ -158,21 +160,21 @@ def findpixel():
     for m in range(9):
         relative_density = density_list[m] - avg_density
 
-       # print(relative_density)
-        if relative_density > 0.082:
+        print(relative_density)
+        if relative_density > 0.12:
             high_density = high_density + 1
         elif relative_density < -0.08:
             low_density = low_density + 1
         else:
             medium_density = medium_density + 1
     print('high: ', high_density, 'medium: ', medium_density, 'low: ', low_density)
-    if high_density == 4 and medium_density== 4 and low_density == 1:
+    if high_density == 4: #and medium_density== 4 and low_density == 1:
         coordinate[f].append("사각형")
         print(coordinate[f])
-    elif high_density == 3 and medium_density== 3 and low_density == 3:
+    elif high_density == 3: #and medium_density== 3 and low_density == 3:
         coordinate[f].append("삼각형")
         print(coordinate[f])
-    elif high_density == 2 and medium_density ==6 and low_density == 1:
+    elif high_density == 2: #and medium_density ==6 and low_density == 1:
         coordinate[f].append("원")
         print(coordinate[f])
 
