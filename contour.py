@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
-img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/7.jpg')
+img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/8.jpg')
 from PIL import Image
 coordinate=[]
 import os
@@ -12,32 +12,60 @@ import seaborn as sns
 def morphology(image):
     k = 0
 
-    blur = cv2.GaussianBlur(image, (5, 5), 0)
+    blur = cv2.GaussianBlur(img, (5, 5), 0)
     imgray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
     th1 = cv2.adaptiveThreshold(imgray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 8)  # gaussian
-    kernel = np.ones((3,3) ,np.uint8)
-    erode = cv2.erode(th1, kernel, iterations=8)
-    diliation = cv2.dilate(th1, kernel, iterations=2)
-    opening = cv2.morphologyEx(th1, cv2.MORPH_OPEN, kernel)
-    close = cv2.morphologyEx(th1, cv2.MORPH_CLOSE, kernel)
+    kernel = np.ones((7, 3), np.uint8)
+    erode = cv2.morphologyEx(th1, cv2.MORPH_ERODE, kernel, iterations=3)
+    diliation = cv2.dilate(th1, kernel, iterations=3)
+    opening = cv2.morphologyEx(th1, cv2.MORPH_OPEN, kernel, iterations=3)
+    close = cv2.morphologyEx(th1, cv2.MORPH_CLOSE, kernel, iterations=3)
 
-   # titles = ['Original', 'Erode','Diliation', 'Opening', 'Close']
-    #images = [image, erode,diliation,opening,close]
+    height, width = erode.shape
 
-    #for i in range(5):
-      #  plt.subplot(2, 3, i + 1), plt.imshow(images[i], 'gray')
-       # plt.title(titles[i])
-       # plt.xticks([]), plt.yticks([])
-    #plt.show()
+    for j in range(height):
+        for i in range(width):
+            if (erode[j, i] < 128):
+                erode[j, i] = 0
 
-    contours, high =cv2.findContours(erode, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            else:
+                erode[j, i] = 255
+
+
+
+    titles = ['Original', 'Erode','Diliation', 'Opening', 'Close']
+    images = [image, erode,diliation,opening,close]
+
+    for i in range(5):
+        plt.subplot(2, 3, i + 1), plt.imshow(images[i], 'gray')
+        plt.title(titles[i])
+        plt.xticks([]), plt.yticks([])
+    plt.show()
+
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+    thresh = cv2.morphologyEx(erode, cv2.MORPH_CLOSE, kernel)
+
+    imFlood = thresh.copy()
+    h, w = thresh.shape[:2]
+    mask = np.zeros((h + 2, w + 2), np.uint8)
+    cv2.floodFill(imFlood, mask, (0, 0), 0)
+
+
+    # Combine flood filled image with original objects
+    imFlood[np.where(thresh == 0)] = 255
+
+
+    # Invert output colors
+    imFlood = ~imFlood
+
+    contours, high =cv2.findContours(imFlood, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(img, contours, -1, (0, 255, 0), 1)
+
     for contour in contours:
 
         [x, y, w, h] = cv2.boundingRect(contour)
 
-
-
-        if w < 30 and h < 30:
+        if w * h < 900:
             continue
         k = k + 1
 
@@ -46,16 +74,22 @@ def morphology(image):
 
 
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 2)
+
+
+
         cropped_image = erode[y:y + h, x:x + w]
         original_image = imgray[y: y + h, x: x + w]
         resize = cv2.resize(cropped_image, dsize=(28,28), interpolation=cv2.INTER_AREA)
         cv2.imwrite(f'D:/practice/contour/sample_images/original_result/{k}.jpg',original_image)
         cv2.imwrite(f'D:/practice/contour/sample_images/result/{k}.jpg', resize)
 
-    print(coordinate)
-   # cv2.imshow('captcha_result', img)
-   # cv2.waitKey(0)
-   # cv2.destroyALLWindows()
+   # print(coordinate)
+
+
+    cv2.imshow('captcha_result', img)
+    cv2.waitKey(0)
+    cv2.destroyALLWindows()
+
 
 def size_down(image):
     global img
@@ -126,6 +160,11 @@ def image_crop(infilename, save_path):
 
                 i += 1
 
+
+
+
+
+
 def findpixel():
     n = 0
     density_list = []
@@ -161,7 +200,7 @@ def findpixel():
         relative_density = density_list[m] - avg_density
 
         print(relative_density)
-        if relative_density > 0.12:
+        if relative_density > 0.10:
             high_density = high_density + 1
         elif relative_density < -0.08:
             low_density = low_density + 1
