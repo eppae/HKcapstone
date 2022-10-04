@@ -16,7 +16,7 @@ def morphology(image):
     imgray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
     th1 = cv2.adaptiveThreshold(imgray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 8)  # gaussian
     kernel = np.ones((7, 3), np.uint8)
-    kernel2= np.ones((8, 8), np.uint8)
+    kernel2= np.ones((5, 5), np.uint8)
     erode = cv2.morphologyEx(th1, cv2.MORPH_ERODE, kernel, iterations=3)
     erode2 = cv2.morphologyEx(th1, cv2.MORPH_ERODE, kernel2, iterations=3)
     diliation = cv2.dilate(th1, kernel, iterations=3)
