@@ -1,5 +1,18 @@
+# -*- coding: utf-8 -*-
+import glob
+import cv2
+import numpy as np
+import glob
 import os, io
-
+import json
+import pickle
+data_root_path = 'C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/'
+save_root_path = 'C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/images/'
+json_root_path = 'C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/Gvidatas/'
+temp = []
+temp = os.listdir(json_root_path)
+temp_len=len(os.listdir('C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/images/all_images/'))-1
+textlist =[]
 def detect_text(path):
     from google.cloud import vision
     client = vision.ImageAnnotatorClient()
@@ -11,19 +24,31 @@ def detect_text(path):
 
     response = client.text_detection(image=image)
     texts = response.text_annotations
-    print('Texts:')
-
     for text in texts:
-        print('\n"{}"'.format(text.description))
+        textbox = ('\n"{}"'.format(text.description))
+        textbox = textbox.split('\n')
+        textlist.append(textbox)
+        save_textlist = textlist[0]
+        #print(save_textlist)
+        with open('save_textlist.pkl','wb')as f:
+            pickle.dump(save_textlist,f)
 
-        vertices = (['({},{})'.format(vertex.x, vertex.y)
-                    for vertex in text.bounding_poly.vertices])
+with open('save_textlist.pkl','rb') as f:
+    jsonlist = pickle.load(f)
 
-        print('bounds: {}'.format(','.join(vertices)))
+for k in range (1,len(temp)-1):
+    with open(json_root_path +f'Gvidata{k}.json','r',encoding='UTF8') as f:
+        json_data = json.load(f)
+        json_data['text'] = jsonlist[k]
+        print(json_data['text'])
 
-file_name = os.path.join(os.path.dirname(__file__),'00002168.png') #해당하는 이미지 파일의 경로를 집어넣을것.
-
-detect_text(file_name)
 
 
+        #print(('\n"{}"'.format(text.description)))
+        #vertices = (['({},{})'.format(vertex.x, vertex.y)
+        #           for vertex in text.bounding_poly.vertices])
 
+        #print('bounds: {}'.format(','.join(vertices)))
+
+        #with open("textdata.txt", 'a') as f:
+        #    f.write(textbox)
