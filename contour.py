@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
-img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/8.jpg')
+img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/7.jpg')
 from PIL import Image
 coordinate=[]
 import os
@@ -16,7 +16,9 @@ def morphology(image):
     imgray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
     th1 = cv2.adaptiveThreshold(imgray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 8)  # gaussian
     kernel = np.ones((7, 3), np.uint8)
+    kernel2= np.ones((8, 8), np.uint8)
     erode = cv2.morphologyEx(th1, cv2.MORPH_ERODE, kernel, iterations=3)
+    erode2 = cv2.morphologyEx(th1, cv2.MORPH_ERODE, kernel2, iterations=3)
     diliation = cv2.dilate(th1, kernel, iterations=3)
     opening = cv2.morphologyEx(th1, cv2.MORPH_OPEN, kernel, iterations=3)
     close = cv2.morphologyEx(th1, cv2.MORPH_CLOSE, kernel, iterations=3)
@@ -33,14 +35,14 @@ def morphology(image):
 
 
 
-    titles = ['Original', 'Erode','Diliation', 'Opening', 'Close']
-    images = [image, erode,diliation,opening,close]
+    #titles = ['Original', 'Erode','Diliation', 'Opening', 'Close']
+    #images = [image, erode,diliation,opening,close]
 
-    for i in range(5):
-        plt.subplot(2, 3, i + 1), plt.imshow(images[i], 'gray')
-        plt.title(titles[i])
-        plt.xticks([]), plt.yticks([])
-    plt.show()
+    #for i in range(5):
+    #    plt.subplot(2, 3, i + 1), plt.imshow(images[i], 'gray')
+    #    plt.title(titles[i])
+    #    plt.xticks([]), plt.yticks([])
+    #plt.show()
 
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
     thresh = cv2.morphologyEx(erode, cv2.MORPH_CLOSE, kernel)
@@ -77,7 +79,7 @@ def morphology(image):
 
 
 
-        cropped_image = erode[y:y + h, x:x + w]
+        cropped_image = erode2[y:y + h, x:x + w]
         original_image = imgray[y: y + h, x: x + w]
         resize = cv2.resize(cropped_image, dsize=(28,28), interpolation=cv2.INTER_AREA)
         cv2.imwrite(f'D:/practice/contour/sample_images/original_result/{k}.jpg',original_image)
@@ -86,9 +88,9 @@ def morphology(image):
    # print(coordinate)
 
 
-    cv2.imshow('captcha_result', img)
-    cv2.waitKey(0)
-    cv2.destroyALLWindows()
+   # cv2.imshow('captcha_result', img)
+   # cv2.waitKey(0)
+   # cv2.destroyALLWindows()
 
 
 def size_down(image):
@@ -154,7 +156,7 @@ def image_crop(infilename, save_path):
                 # 가로 세로 시작, 가로 세로 끝
                 crop_img = img.crop(bbox)
 
-                fname = "{}.jpg".format("{0:05d}".format(i))
+                fname = f"{i}.jpg"
                 savename = save_path + fname
                 crop_img.save(savename)
 
@@ -174,7 +176,8 @@ def findpixel():
     avg_density = 0
     relative_density = 0
     for n in range(9):
-        img = cv2.imread(f'D:/practice/contour/sample_images/crop/0000{n}.jpg')
+
+        img = cv2.imread(f'D:/practice/contour/sample_images/crop/{n}.jpg')
         img_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
         hitrate = 0
         density = 0
@@ -189,6 +192,7 @@ def findpixel():
                     img_gray[j, i] = 255
 
 
+
         density = hitrate / (height * width)
         avg_density = avg_density + density
        # print('밀도: ', density)
@@ -200,9 +204,9 @@ def findpixel():
         relative_density = density_list[m] - avg_density
 
         print(relative_density)
-        if relative_density > 0.10:
+        if relative_density > 0.152:
             high_density = high_density + 1
-        elif relative_density < -0.08:
+        elif relative_density < -0.12:
             low_density = low_density + 1
         else:
             medium_density = medium_density + 1
@@ -213,7 +217,7 @@ def findpixel():
     elif high_density == 3: #and medium_density== 3 and low_density == 3:
         coordinate[f].append("삼각형")
         print(coordinate[f])
-    elif high_density == 2: #and medium_density ==6 and low_density == 1:
+    elif low_density == 1 and medium_density>=4: #and medium_density ==6 and low_density == 1:
         coordinate[f].append("원")
         print(coordinate[f])
 
