@@ -33,14 +33,16 @@ def detect_text(path):
         with open('save_textlist.pkl','wb')as f:
             pickle.dump(save_textlist,f)
 
-with open('save_textlist.pkl','rb') as f:
+
+with open('save_textlist.pkl', 'rb') as f:
     jsonlist = pickle.load(f)
 
-for k in range (1,len(temp)-1):
-    with open(json_root_path +f'Gvidata{k}.json','r',encoding='UTF8') as f:
-        json_data = json.load(f)
-        json_data['text'] = jsonlist[k]
-        print(json_data['text'])
+    for k in range (2,len(temp)-1):
+        with open(json_root_path +f'Gvidata{k}.json','r',encoding='UTF8') as file:
+            json_data = json.load(file)
+            json_data['text'] = jsonlist[k]
+
+            print(json.dump(json_data, open(json_root_path + f'Gvidata{k}.json', 'w')))
 
 
 
@@ -52,3 +54,11 @@ for k in range (1,len(temp)-1):
 
         #with open("textdata.txt", 'a') as f:
         #    f.write(textbox)
+
+
+images= glob.glob(save_root_path +'/all_images/*.jpg')
+
+for text_images in images:
+    file_name = os.path.join(os.path.dirname(__file__),text_images)
+    detect_text(file_name)
+
