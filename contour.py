@@ -5,13 +5,11 @@ img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/7.jpg')
 from PIL import Image
 coordinate=[]
 import os
-import scipy as sp
 import matplotlib.pylab as plt
-import seaborn as sns
+import json
 
 def morphology(image):
     k = 0
-
     blur = cv2.GaussianBlur(img, (5, 5), 0)
     imgray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
     th1 = cv2.adaptiveThreshold(imgray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 8)  # gaussian
@@ -19,9 +17,7 @@ def morphology(image):
     kernel2= np.ones((5, 5), np.uint8)
     erode = cv2.morphologyEx(th1, cv2.MORPH_ERODE, kernel, iterations=3)
     erode2 = cv2.morphologyEx(th1, cv2.MORPH_ERODE, kernel2, iterations=3)
-    diliation = cv2.dilate(th1, kernel, iterations=3)
-    opening = cv2.morphologyEx(th1, cv2.MORPH_OPEN, kernel, iterations=3)
-    close = cv2.morphologyEx(th1, cv2.MORPH_CLOSE, kernel, iterations=3)
+
 
     height, width = erode.shape
 
@@ -72,7 +68,7 @@ def morphology(image):
         k = k + 1
 
 
-        coordinate.append([f'{k}.jpg', x, y, w, h])
+        coordinate.append([f'{k}.jpg', f'{x, y, w, h}'])
 
 
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 2)
@@ -84,54 +80,6 @@ def morphology(image):
         resize = cv2.resize(cropped_image, dsize=(28,28), interpolation=cv2.INTER_AREA)
         cv2.imwrite(f'D:/practice/contour/sample_images/original_result/{k}.jpg',original_image)
         cv2.imwrite(f'D:/practice/contour/sample_images/result/{k}.jpg', resize)
-
-   # print(coordinate)
-
-
-   # cv2.imshow('captcha_result', img)
-   # cv2.waitKey(0)
-   # cv2.destroyALLWindows()
-
-
-def size_down(image):
-    global img
-    down_width = 600
-    down_height = 800
-    down_points = (down_width, down_height)
-    img = cv2.resize(image, down_points, interpolation=cv2.INTER_LINEAR)
-
-def contour():
-    blur = cv2.GaussianBlur(img, (5, 5), 0)
-    imgray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
-    ret, th1 = cv2.threshold(imgray, 127, 255, 0) #global
-    th2 = cv2.adaptiveThreshold(imgray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 15, 10) #mean
-    th3 = cv2.adaptiveThreshold(imgray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 5) #gaussian
-
-    contours, high =cv2.findContours(th2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-    titles = ['Original', 'Grayscale', 'Global', 'Mean', 'Gaussian']
-    images = [img,imgray,th1, th2, th3, ]
-    for i in range(5):
-        plt.subplot(2, 3, i + 1), plt.imshow(images[i], 'gray')
-        plt.title(titles[i])
-        plt.xticks([]), plt.yticks([])
-    plt.show()
-
-
-
-
-    #cv2.imshow('orginal', img)
-    cv2.drawContours(img, contours, -1, (0, 0, 255), 1)
-    #cv2.imshow('grayscale', imgray)
-    #cv2.imshow('global', th1)
-    #cv2.imshow('mean', th2)
-    cv2.imshow('contours', img)
-    #cv2.imshow('gaussian', th3)
-
-    #cv2.imshow('result: Global', img)
-
-    cv2.waitKey(0)
-    cv2.destroyALLWindows()
 
 
 
@@ -221,15 +169,65 @@ def findpixel():
         coordinate[f].append("원")
         print(coordinate[f])
 
-#contour()
-morphology(img)
-#image_crop(f'D:/practice/contour/sample_images/result/7.jpg', 'D:/practice/contour/sample_images/crop/')
-#findpixel_test()
+def detect_figure():
+    for f in range(len(os.listdir('D:/practice/contour/sample_images/result/'))):
+        im = cv2.imread(f'D:/practice/contour/sample_images/result/{f + 1}.jpg')
 
+        imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+
+        ret, thresh = cv2.threshold(imgray, 80, 255, 1)  ### !! inverse binary !! ###
+
+        contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+        ctt = 0
+        for cnt in contours:
+            epsilon = 0.04 * cv2.arcLength(cnt, True)
+            approx = cv2.approxPolyDP(cnt, epsilon, True)
+            print(len(approx))  ### !! fix indentation !! ###
+            if len(approx) == 5:
+                print("pentagon")
+                cv2.drawContours(im, [cnt], 0, 255, -1)
+                coordinate[f].append("")
+                coordinate[f].append("pentagon")
+                break
+            elif len(approx) == 3:
+                print("triangle")
+                cv2.drawContours(im, [cnt], 0, (0, 255, 0), -1)
+                coordinate[f].append("")
+                coordinate[f].append("triangle")
+                break
+            elif len(approx) == 4:
+                print("square")
+                cv2.drawContours(im, [cnt], 0, (0, 0, 255), -1)
+                coordinate[f].append("")
+                coordinate[f].append("square")
+                break
+            elif len(approx) >= 6:
+                print("circle")
+                cv2.drawContours(im, [cnt], 0, (0, 255, 255), -1)
+                coordinate[f].append("")
+                coordinate[f].append("circle")
+                break
+            else:
+                print("unknown")
+                break
+        cv2.imwrite(f'D:/practice/contour/sample_images/approx/{f + 1}.jpg', im)
+
+
+#전체 로직
+morphology(img)
 f=0
 for f in range(len(os.listdir('D:/practice/contour/sample_images/result/'))):
     image_crop(f'D:/practice/contour/sample_images/result/{f+1}.jpg', 'D:/practice/contour/sample_images/crop/')
     print(f'D:/practice/contour/sample_images/result/{f+1}.jpg')
-    findpixel()
+    #findpixel()
+detect_figure()
+dict_list = ['image_number','location','text','figure']
+for k in range(len(os.listdir('D:/practice/contour/sample_images/result/'))):
+            dictionary = dict(zip(dict_list, coordinate[k]))
+            print(json.dump(dictionary, open('D:/practice/contour/json/'+ f'Gvidata{k+1}.json', 'w')))
+
+
+
 
 
