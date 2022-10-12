@@ -68,8 +68,8 @@ def morphology(image):
         k = k + 1
 
 
-        coordinate.append([f'{k}.jpg', f'{x, y, w, h}'])
-
+        coordinate.append([f'{k}.jpg', f'{x},{y},{w},{h}'])
+        print(coordinate)
 
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 2)
 
