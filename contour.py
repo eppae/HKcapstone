@@ -21,6 +21,7 @@ def morphology(image):
 
     height, width = erode.shape
 
+
     for j in range(height):
         for i in range(width):
             if (erode[j, i] < 128):
