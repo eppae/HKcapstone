@@ -7,48 +7,51 @@ from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 from pptx import Presentation
 from math import *
+import cv2
+img = cv2.imread('practice.jpg')
 temp =[]
+H,W,C = img.shape
+print(img.shape)
 
 json_root_path = 'C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/Gvidatas/'
 temp =os.listdir(json_root_path)
 temp_len = len(temp)
 
-with open('./Gvidatas/Gvidata3.json', 'r', encoding='utf-8') as f:
-    contents = f.read()  # string
-    data = json.loads(contents)
-
 prs = Presentation()
+prs.slide_width = Cm(25)
+prs.slide_height = Cm(19)
+print (prs.slide_width, prs.slide_height)
 blank_slide_layout = prs.slide_layouts[6]
 slide = prs.slides.add_slide(blank_slide_layout)
 shapes = slide.shapes
 
-print(data["location"][1])
-for i in range(1, temp_len):
+for i in range(2, temp_len):
 
     with open(json_root_path + f'Gvidata{i}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
         contents = file.read()  # string
         data = json.loads(contents)
-
         x = int (data["location"][0])
         y = int (data["location"][1])
         w = int (data["location"][2])
         h = int (data["location"][3])
 
-        left = round((24 * (x/3365)),4)
-        top = round((12 * (1 - (y/2386))),4)
-        width = round(1+(24 * ((w)/3365)),4)
-        height = round(1+(12 * ((h)/2386)),4)
+
+
+        left = round((25 * (x/W)),4)
+        top = round((19 * ((y/H))),4)
+        width = round((25 * ((w)/W)),4)
+        height = round((19 * ((h)/H)),4)
         print(left, top, width, height)
 
         if data["text"] != "" and data["figure"] =="":
-            print(data["text"])
+            print((data["text"]).replace('"',''))
             tb = slide.shapes.add_textbox(Cm(left), Cm(top), Cm(width), Cm(height))
             tf = tb.text_frame
             tf.text = ''
             p = tf.add_paragraph()
-            p.text = data["text"]
-            p.font.size = Pt(15)
-            else:
+            p.text = (data["text"]).replace('"','')
+            p.font.size = Pt(10)
+        else:
             if data["figure"] == "circle":
                 print(data["figure"])
                 shape = shapes.add_shape(MSO_SHAPE.OVAL, Cm(left), Cm(top), Cm(width), Cm(height))
@@ -68,6 +71,7 @@ for i in range(1, temp_len):
                 shape.fill.background()
                 line = shape.line
                 line.color.rgb = RGBColor(0, 0, 0)
+
             print("1")
 
 prs.save('demo.pptx')
