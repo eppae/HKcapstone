@@ -1,0 +1,78 @@
+# -*- coding: utf-8 -*-
+import numpy as np
+import cv2
+import json
+import glob
+from matplotlib import pyplot as plt
+import glob
+import cv2
+import numpy as np
+img = cv2.imread('00000001.jpg')
+img_temp = cv2.imread('00000001.jpg')
+
+
+
+data_root_path = 'C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/'
+save_root_path = 'C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/images/'
+json_root_path = 'C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/Gvidatas/'
+images= glob.glob(save_root_path +'/all_images/*.jpg')
+
+
+
+
+
+def preprocessing(image):
+    k = 0
+    bboxes = {}
+
+    blur = cv2.GaussianBlur(image, (5, 5), 0)
+    imgray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
+    th1 = cv2.adaptiveThreshold(imgray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, 8)  # gaussian
+    kernel = np.ones((3,3) ,np.uint8)
+    erode = cv2.erode(th1, kernel, iterations=8)
+    contours, high =cv2.findContours(erode, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    for contour in contours:
+
+        [x, y, w, h] = cv2.boundingRect(contour)
+        if w < 30 and h < 30:
+            continue
+
+        k = k + 1
+        bboxes[k]={x,y,w,h}
+        Gvidict = {'image_number': f'{k}', 'location': [x,y,w,h],'text': "",'figure': ""}
+        image_number_list = str(Gvidict['image_number'])
+        location_list = str(Gvidict['location'])
+        text_list = str(Gvidict['text'])
+        figure_list = str(Gvidict['figure'])
+        text = str(location_list + text_list + figure_list + "\n")
+
+        print(json.dump(Gvidict, open(json_root_path + f'Gvidata{k}.json', 'w')))
+        with open("gvidata.txt",'a') as f :
+            f.write(text)
+        '''
+        strgvi = eval(str(Gvidict) +",")
+
+        strgvi2 = (json.dumps(strgvi,separators=(',', ':'),ensure_ascii=False))
+        print(json.dump(strgvi2, open("Gvidata.json",'a')))
+
+        
+        print(json.dump(strgvi,open("Gvidata.json",'a')))
+        print(json.dump(Gvidict, open("Gvidata.json", 'a'),separators=(',', ':')))
+        
+        gvijson = {key: value for key, value in dict.fromkeys(location).items()}
+        
+        print(Gvidict.keys())
+        '''
+
+        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 2)
+        cropped_image = img[y:y + h, x:x + w]
+        cv2.imwrite(save_root_path + f'all_images/{k}.jpg', cropped_image) \
+
+    cv2.imshow('captcha_result', img)
+    cv2.waitKey(0)
+    cv2.destroyALLWindows()
+
+
+
+preprocessing(img)
