@@ -15,20 +15,6 @@ function DetailScreen({route}) {
       let ppturl = result.body.URL;
       console.log(ppturl);
       Linking.openURL(ppturl);
-      // await RNFetchBlob.config({
-      //   addAndroidDownloads: {
-      //     useDownloadManager: true,
-      //     notification: true,
-      //     appendExt: 'pptx',
-      //     path: `${RNFetchBlob.fs.dirs.DownloadDir}/${file.name}`,
-      //     description: 'Downloading the file',
-      //   },
-      // })
-      // .fetch('GET','https://15zytiytli.execute-api.us-west-2.amazonaws.com/v2/uploadppt',
-      // {
-      //   "Content-Type": "multipart/form-data",
-      //   body: body,
-      // });
 
     } catch(error){
       console.log('fail download');
