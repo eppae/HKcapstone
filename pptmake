@@ -48,24 +48,26 @@ for i in range(1, temp_len):
             p = tf.add_paragraph()
             p.text = data["text"]
             p.font.size = Pt(15)
-        else:
+            else:
             if data["figure"] == "circle":
                 print(data["figure"])
                 shape = shapes.add_shape(MSO_SHAPE.OVAL, Cm(left), Cm(top), Cm(width), Cm(height))
                 shape.fill.background()
                 line = shape.line
                 line.color.rgb = RGBColor(0, 0, 0)
+
             if data["figure"] == "rectangle":
                 print(data["figure"])
-                shape = shapes.add_shape(MSO_SHAPE.OVAL, Cm(left), Cm(top), Cm(width), Cm(height))
+                shape = shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Cm(left), Cm(top), Cm(width), Cm(height))
                 shape.fill.background()
                 line = shape.line
                 line.color.rgb = RGBColor(0, 0, 0)
             if data["figure"] == "triangle":
                 print(data["figure"])
-                shape = shapes.add_shape(MSO_SHAPE.OVAL, Cm(left), Cm(top), Cm(width), Cm(height))
+                shape = shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE, Cm(left), Cm(top), Cm(width), Cm(height))
                 shape.fill.background()
                 line = shape.line
                 line.color.rgb = RGBColor(0, 0, 0)
+            print("1")
 
 prs.save('demo.pptx')
