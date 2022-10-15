@@ -1,12 +1,28 @@
-import numpy as np
 import cv2
 from matplotlib import pyplot as plt
-img = cv2.imread('D:/practice/contour/sample_images/sample_ppt/7.jpg')
+img = cv2.imread('./sample_images/sample_ppt/7.jpg')
 from PIL import Image
 coordinate=[]
-import os
 import matplotlib.pylab as plt
+import cv2
+import numpy as np
+import glob
+import os, io
 import json
+from pptx.util import Inches, Cm, Pt
+from pptx.enum.dml import MSO_THEME_COLOR
+from pptx.dml.color import RGBColor
+from pptx.enum.shapes import MSO_SHAPE
+from pptx import Presentation
+from math import *
+from google.cloud import vision
+
+client = vision.ImageAnnotatorClient()
+original_number = 0
+textlist = []
+a = []
+H,W,C = img.shape
+temp_len = len(os.listdir('./json/'))
 
 def morphology(image):
     k = 0
@@ -79,8 +95,8 @@ def morphology(image):
         cropped_image = erode2[y:y + h, x:x + w]
         original_image = imgray[y: y + h, x: x + w]
         resize = cv2.resize(cropped_image, dsize=(28,28), interpolation=cv2.INTER_AREA)
-        cv2.imwrite(f'D:/practice/contour/sample_images/original_result/{k}.jpg',original_image)
-        cv2.imwrite(f'D:/practice/contour/sample_images/result/{k}.jpg', resize)
+        cv2.imwrite(f'./sample_images/original_result/{k}.jpg',original_image)
+        cv2.imwrite(f'./sample_images/result/{k}.jpg', resize)
 
 
 
@@ -116,63 +132,40 @@ def image_crop(infilename, save_path):
 
 
 
-def findpixel():
-    n = 0
-    density_list = []
-    high_density = 0
-    medium_density = 0
-    low_density = 0
-    avg_density = 0
-    relative_density = 0
-    for n in range(9):
+def detect_text(path):
+    from google.cloud import vision
+    client = vision.ImageAnnotatorClient()
 
-        img = cv2.imread(f'D:/practice/contour/sample_images/crop/{n}.jpg')
-        img_gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-        hitrate = 0
-        density = 0
-        plt.show()
-        height, width = img_gray.shape
-        for j in range(height):
-            for i in range(width):
-                if (img_gray[j, i] < 128):
-                    img_gray[j, i] = 0
-                    hitrate = hitrate + 1
-                else:
-                    img_gray[j, i] = 255
+    with io.open(path, 'rb') as image_file:
+        content = image_file.read()
+
+    image = vision.Image(content=content)
+
+    response = client.text_detection(image=image)
+    texts = response.text_annotations
+
+    for text in texts:
+        return ('\n"{}"'.format(text.description))
+        # print(textbox)
+
+        # print(save_textlist)
+        # with open('save_textlist.pkl','wb')as f:
+        #    pickle.dump(save_textlist,f)
+
+        # vertices = (['({},{})'.format(vertex.x, vertex.y)
+        #           for vertex in text.bounding_poly.vertices])
+
+        # print('bounds: {}'.format(','.join(vertices)))
+
+        # with open("textdata.txt", 'a') as f:
+        #    f.write(textbox)
 
 
 
-        density = hitrate / (height * width)
-        avg_density = avg_density + density
-       # print('밀도: ', density)
-        density_list.append(density)
-    avg_density = avg_density / 9
-    #print('평균밀도', avg_density)
-    m = 0
-    for m in range(9):
-        relative_density = density_list[m] - avg_density
-
-        print(relative_density)
-        if relative_density > 0.152:
-            high_density = high_density + 1
-        elif relative_density < -0.12:
-            low_density = low_density + 1
-        else:
-            medium_density = medium_density + 1
-    print('high: ', high_density, 'medium: ', medium_density, 'low: ', low_density)
-    if high_density == 4: #and medium_density== 4 and low_density == 1:
-        coordinate[f].append("사각형")
-        print(coordinate[f])
-    elif high_density == 3: #and medium_density== 3 and low_density == 3:
-        coordinate[f].append("삼각형")
-        print(coordinate[f])
-    elif low_density == 1 and medium_density>=4: #and medium_density ==6 and low_density == 1:
-        coordinate[f].append("원")
-        print(coordinate[f])
 
 def detect_figure():
-    for f in range(len(os.listdir('D:/practice/contour/sample_images/result/'))):
-        im = cv2.imread(f'D:/practice/contour/sample_images/result/{f + 1}.jpg')
+    for f in range(len(os.listdir('./sample_images/result/'))):
+        im = cv2.imread(f'./sample_images/result/{f + 1}.jpg')
 
         imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
 
@@ -212,21 +205,105 @@ def detect_figure():
             else:
                 print("unknown")
                 break
-        cv2.imwrite(f'D:/practice/contour/sample_images/approx/{f + 1}.jpg', im)
+        cv2.imwrite(f'./sample_images/approx/{f + 1}.jpg', im)
 
+def makeppt():
+    prs = Presentation()
+    prs.slide_width = Cm(25)
+    prs.slide_height = Cm(19)
+
+    blank_slide_layout = prs.slide_layouts[6]
+    slide = prs.slides.add_slide(blank_slide_layout)
+    shapes = slide.shapes
+
+    for i in range(2, temp_len):
+
+        with open( f'./json/Gvidata{i}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
+            contents = file.read()  # string
+            data = json.loads(contents)
+            x = int (data["location"][0])
+            y = int (data["location"][1])
+            w = int (data["location"][2])
+            h = int (data["location"][3])
+
+
+
+            left = round((25 * (x/W)),4)
+            top = round((19 * ((y/H))),4)
+            width = round((25 * ((w)/W)),4)
+            height = round((19 * ((h)/H)),4)
+            print(left, top, width, height)
+
+            if data["text"] != "" and data["figure"] =="":
+                print((data["text"]).replace('"',''))
+                tb = slide.shapes.add_textbox(Cm(left), Cm(top), Cm(width), Cm(height))
+                tf = tb.text_frame
+                tf.text = ''
+                p = tf.add_paragraph()
+                p.text = (data["text"]).replace('"','')
+                p.font.size = Pt(10)
+            else:
+                if data["figure"] == "circle":
+                    print(data["figure"])
+                    shape = shapes.add_shape(MSO_SHAPE.OVAL, Cm(left), Cm(top), Cm(width), Cm(height))
+                    shape.fill.background()
+                    line = shape.line
+                    line.color.rgb = RGBColor(0, 0, 0)
+
+                if data["figure"] == "rectangle":
+                    print(data["figure"])
+                    shape = shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Cm(left), Cm(top), Cm(width), Cm(height))
+                    shape.fill.background()
+                    line = shape.line
+                    line.color.rgb = RGBColor(0, 0, 0)
+                if data["figure"] == "triangle":
+                    print(data["figure"])
+                    shape = shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE, Cm(left), Cm(top), Cm(width), Cm(height))
+                    shape.fill.background()
+                    line = shape.line
+                    line.color.rgb = RGBColor(0, 0, 0)
+
+                print("1")
+
+    prs.save('demo.pptx')
 
 #전체 로직
 morphology(img)
 f=0
-for f in range(len(os.listdir('D:/practice/contour/sample_images/result/'))):
-    image_crop(f'D:/practice/contour/sample_images/result/{f+1}.jpg', 'D:/practice/contour/sample_images/crop/')
-    print(f'D:/practice/contour/sample_images/result/{f+1}.jpg')
-    #findpixel()
+for f in range(len(os.listdir('./sample_images/result/'))):
+    image_crop(f'./sample_images/result/{f+1}.jpg', './sample_images/crop/')
+    print(f'./sample_images/result/{f+1}.jpg')
+
 detect_figure()
 dict_list = ['image_number','location','text','figure']
-for k in range(len(os.listdir('D:/practice/contour/sample_images/result/'))):
+for k in range(len(os.listdir('./sample_images/result/'))):
             dictionary = dict(zip(dict_list, coordinate[k]))
-            print(json.dump(dictionary, open('D:/practice/contour/json/'+ f'Gvidata{k+1}.json', 'w')))
+            print(json.dump(dictionary, open('./json/'+ f'Gvidata{k+1}.json', 'w')))
+
+
+#detect_text
+images = glob.glob('./sample_images/original_result/*.jpg')
+
+for j in images:
+    file_name = os.path.join('./sample_images/original_result', f'{j}')
+    # print(file_name)
+    detect_text(file_name)
+
+    if detect_text(file_name) == None:
+        a.append('')
+        original_number += 1
+    else:
+        a.append(detect_text(file_name))
+
+for k in range(2, len('./json/')):  # 1번 이미지는 추출할 이미지 전체 파일을 잡아서 2번부터, 시작 이미지는 1부터 시작해서 temp -1
+
+    with open('./json/' + f'Gvidata{k}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
+        json_data = json.load(file)
+        json_data['text'] = a[k - 1]  # 해당 텍스트 값을 집어넣기
+        print(json.dump(json_data, open('./json/'+ f'Gvidata{k+1}.json', 'w')))  # 수정한 json데이터를 Gvidatak.json파일로 저장
+
+#makeppt
+makeppt()
 
 
 
