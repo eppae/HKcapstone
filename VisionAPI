@@ -17,7 +17,7 @@ save_root_path = 'C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/images
 json_root_path = 'C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/Gvidatas/'
 temp = []
 temp = os.listdir(json_root_path)
-temp_len = len(os.listdir('C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/images/all_images/')) - 1
+temp_len = len(os.listdir('C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/images/original_result/')) - 1
 textlist = []
 
 a = []
@@ -38,30 +38,24 @@ def detect_text(path):
     for text in texts:
         return ('\n"{}"'.format(text.description))
         # print(textbox)
-        '''
-        textbox = ('\n"{}"'.format(text.description))
-        textbox = textbox.split('\n')
-        textlist.append(textbox)
-
-        save_textlist = textlist[0]
-        '''
+        
         # print(save_textlist)
-    # with open('save_textlist.pkl','wb')as f:
-    #    pickle.dump(save_textlist,f)
+        # with open('save_textlist.pkl','wb')as f:
+        #    pickle.dump(save_textlist,f)
 
-    # vertices = (['({},{})'.format(vertex.x, vertex.y)
-    #           for vertex in text.bounding_poly.vertices])
+        # vertices = (['({},{})'.format(vertex.x, vertex.y)
+        #           for vertex in text.bounding_poly.vertices])
 
-    # print('bounds: {}'.format(','.join(vertices)))
+        # print('bounds: {}'.format(','.join(vertices)))
 
-    # with open("textdata.txt", 'a') as f:
-    #    f.write(textbox)
+        # with open("textdata.txt", 'a') as f:
+        #    f.write(textbox)
 
 
 images = glob.glob(save_root_path + '/all_images/*.jpg')
 
 for j in images:
-    file_name = os.path.join('C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/images/all_images', f'{j}')
+    file_name = os.path.join('C:/Users/minje/PycharmProjects/pytorchproject/VisionAPI/images/original_result', f'{j}')
     # print(file_name)
     detect_text(file_name)
 
