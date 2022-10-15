@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import cv2
 import json
 import glob
 from matplotlib import pyplot as plt
 import glob
 import cv2
 import numpy as np
-img = cv2.imread('00000001.jpg')
-img_temp = cv2.imread('00000001.jpg')
+img = cv2.imread('1.jpg')
+img_temp = cv2.imread('1.jpg')
 
 
 
@@ -50,20 +49,7 @@ def preprocessing(image):
         print(json.dump(Gvidict, open(json_root_path + f'Gvidata{k}.json', 'w')))
         with open("gvidata.txt",'a') as f :
             f.write(text)
-        '''
-        strgvi = eval(str(Gvidict) +",")
 
-        strgvi2 = (json.dumps(strgvi,separators=(',', ':'),ensure_ascii=False))
-        print(json.dump(strgvi2, open("Gvidata.json",'a')))
-
-        
-        print(json.dump(strgvi,open("Gvidata.json",'a')))
-        print(json.dump(Gvidict, open("Gvidata.json", 'a'),separators=(',', ':')))
-        
-        gvijson = {key: value for key, value in dict.fromkeys(location).items()}
-        
-        print(Gvidict.keys())
-        '''
 
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 2)
         cropped_image = img[y:y + h, x:x + w]
