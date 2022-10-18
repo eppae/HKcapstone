@@ -9,6 +9,7 @@ import numpy as np
 import glob
 import os, io
 import json
+import requests
 from pptx.util import Inches, Cm, Pt
 from pptx.enum.dml import MSO_THEME_COLOR
 from pptx.dml.color import RGBColor
@@ -16,6 +17,7 @@ from pptx.enum.shapes import MSO_SHAPE
 from pptx import Presentation
 from math import *
 from google.cloud import vision
+
 
 client = vision.ImageAnnotatorClient()
 original_number = 0
@@ -268,6 +270,13 @@ def makeppt():
                 print("1")
 
     prs.save('demo.pptx')
+    try:
+        url = 'https://15zytiytli.execute-api.us-west-2.amazonaws.com/v2/uploadppt'
+        files = {'file': open('demo.pptx', 'rb')}
+        r = requests.post(url, files=files)
+        print(r.text)
+    except:
+        print("fail")
 
 #전체 로직
 morphology(img)
