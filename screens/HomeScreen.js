@@ -41,7 +41,7 @@ function HomeScreen({navigation}) {
     var body = new FormData();
     body.append('file',photo);
     
-    let res = await fetch('https://15zytiytli.execute-api.us-west-2.amazonaws.com/v2/uploadimage',{
+    let res = await fetch('Upload image API URL',{
       method:'POST',
       body: body,
       headers: {'content-Type': 'multipart/form-data' }
@@ -49,6 +49,13 @@ function HomeScreen({navigation}) {
 
     let result = await res.json();
     console.log(result);
+
+    let convertapi = await fetch('Lambda API'+ asset.fileName,{
+      method:'GET',
+    })
+
+    let convert =await convertapi.json();
+    console.log(convert);
   }
   
   return (

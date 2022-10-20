@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Alert, PermissionsAndroid, Linking } from 'react-native';
-import RNFetchBlob from 'rn-fetch-blob';
 
 function DetailScreen({route}) {
   const [response] = useState(null);
   const downloadppt = async () => {
     try{
 
-      let res = await fetch('URL', {
+      let res = await fetch('PPT download URL', {
         method: 'GET'
       })
       let result = await res.json();
@@ -15,20 +14,6 @@ function DetailScreen({route}) {
       let ppturl = result.body.URL;
       console.log(ppturl);
       Linking.openURL(ppturl);
-      // await RNFetchBlob.config({
-      //   addAndroidDownloads: {
-      //     useDownloadManager: true,
-      //     notification: true,
-      //     appendExt: 'pptx',
-      //     path: `${RNFetchBlob.fs.dirs.DownloadDir}/${file.name}`,
-      //     description: 'Downloading the file',
-      //   },
-      // })
-      // .fetch('GET','https://15zytiytli.execute-api.us-west-2.amazonaws.com/v2/uploadppt',
-      // {
-      //   "Content-Type": "multipart/form-data",
-      //   body: body,
-      // });
 
     } catch(error){
       console.log('fail download');
