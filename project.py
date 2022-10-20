@@ -1,6 +1,7 @@
 import cv2
 from matplotlib import pyplot as plt
-img = cv2.imread('./sample_images/sample_ppt/7.jpg')
+
+from io import BytesIO
 from PIL import Image
 coordinate=[]
 import matplotlib.pylab as plt
@@ -17,14 +18,29 @@ from pptx.enum.shapes import MSO_SHAPE
 from pptx import Presentation
 from math import *
 from google.cloud import vision
+from PIL import Image
+import sys
 
+def DeleteAllFiles(filePath):
+    if os.path.exists(filePath):
+        for file in os.scandir(filePath):
+            os.remove(file.path)
+        return 'Remove All File'
 
-client = vision.ImageAnnotatorClient()
-original_number = 0
-textlist = []
-a = []
-H,W,C = img.shape
-temp_len = len(os.listdir('./json/'))
+    else:
+        return 'Directory Not Found'
+
+def loadimg(url):
+    response = requests.get(imgurl)
+    responselist = []
+    responselist = json.loads(response.text)
+
+    download_url = responselist['body']['URL']
+    download_image = requests.get(download_url)
+
+    photo = open('./sample_images/sample_ppt/8.jpg', 'wb')
+    photo.write(download_image.content)
+    photo.close
 
 def morphology(image):
     k = 0
@@ -206,6 +222,9 @@ def detect_figure():
                 break
             else:
                 print("unknown")
+                cv2.drawContours(im, [cnt], 0, (0, 255, 255), -1)
+                coordinate[f].append("")
+                coordinate[f].append("unknown")
                 break
         cv2.imwrite(f'./sample_images/approx/{f + 1}.jpg', im)
 
@@ -236,37 +255,36 @@ def makeppt():
             height = round((19 * ((h)/H)),4)
             print(left, top, width, height)
 
-            if data["figure"] =="":
+            if data['figure'] =="":
                 continue
             else:
-                if data["text"] != "":
-                    print((data["text"]).replace('"', ''))
+                if data['text'] != "":
+                    print((data['text']).replace('"', ''))
                     tb = slide.shapes.add_textbox(Cm(left), Cm(top), Cm(width), Cm(height))
                     tf = tb.text_frame
                     tf.text = ''
                     p = tf.add_paragraph()
-                    p.text = (data["text"]).replace('"', '')
+                    p.text = (data['text']).replace('"', '')
                     p.font.size = Pt(10)
-                if data["figure"] == "circle" and data["text"] =="":
-                    print(data["figure"])
+                if data['figure'] == "circle" and data['text'] =="":
+                    print(data['figure'])
                     shape = shapes.add_shape(MSO_SHAPE.OVAL, Cm(left), Cm(top), Cm(width), Cm(height))
                     shape.fill.background()
                     line = shape.line
                     line.color.rgb = RGBColor(0, 0, 0)
 
-                if data["figure"] == "square" and data["text"] =="":
-                    print(data["figure"])
+                if data['figure'] == "square" and data['text'] =="":
+                    print(data['figure'])
                     shape = shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Cm(left), Cm(top), Cm(width), Cm(height))
                     shape.fill.background()
                     line = shape.line
                     line.color.rgb = RGBColor(0, 0, 0)
-                if data["figure"] == "triangle" and data["text"] =="":
-                    print(data["figure"])
+                if data['figure'] == "triangle" and data['text'] =="":
+                    print(data['figure'])
                     shape = shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE, Cm(left), Cm(top), Cm(width), Cm(height))
                     shape.fill.background()
                     line = shape.line
                     line.color.rgb = RGBColor(0, 0, 0)
-
                 print("1")
 
     prs.save('demo.pptx')
@@ -279,6 +297,21 @@ def makeppt():
         print("fail")
 
 #전체 로직
+
+
+imgurl = 'https://15zytiytli.execute-api.us-west-2.amazonaws.com/v2/hknu-pptimage?file=image/8.jpg'
+
+client = vision.ImageAnnotatorClient()
+original_number = 0
+textlist = []
+a = []
+
+temp_len = len(os.listdir('./json/'))
+loadimg(imgurl)
+
+img = cv2.imread('./sample_images/sample_ppt/8.jpg')
+H,W,C = img.shape
+
 morphology(img)
 f=0
 for f in range(len(os.listdir('./sample_images/result/'))):
@@ -321,3 +354,11 @@ for f in range(len(os.listdir('./json/'))):
 
 #makeppt
 makeppt()
+
+DeleteAllFiles('./sample_images/crop')
+DeleteAllFiles('./sample_images/approx')
+DeleteAllFiles('./sample_images/original_result')
+DeleteAllFiles('./sample_images/result')
+DeleteAllFiles('./sample_images/sample_ppt')
+DeleteAllFiles('./json')
+exit()
