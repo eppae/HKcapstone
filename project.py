@@ -21,6 +21,8 @@ from google.cloud import vision
 from PIL import Image
 import sys
 
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="root-amulet-358418-f65fae9b5f90.json"
+
 def DeleteAllFiles(filePath):
     if os.path.exists(filePath):
         for file in os.scandir(filePath):
