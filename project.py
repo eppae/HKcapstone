@@ -1,27 +1,23 @@
-import cv2
-from matplotlib import pyplot as plt
-
-from io import BytesIO
-from PIL import Image
+# -*- coding: utf-8 -*-
 coordinate=[]
-import matplotlib.pylab as plt
-import cv2
+
 import numpy as np
-import glob
 import os, io
 import json
 import requests
+
+import cv2
 from pptx.util import Inches, Cm, Pt
-from pptx.enum.dml import MSO_THEME_COLOR
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 from pptx import Presentation
-from math import *
 from google.cloud import vision
 from PIL import Image
-import sys
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="root-amulet-358418-f65fae9b5f90.json"
+
+text_number = 0
+
 
 def DeleteAllFiles(filePath):
     if os.path.exists(filePath):
@@ -148,10 +144,6 @@ def image_crop(infilename, save_path):
                 i += 1
 
 
-
-
-
-
 def detect_text(path):
     from google.cloud import vision
     client = vision.ImageAnnotatorClient()
@@ -166,20 +158,35 @@ def detect_text(path):
 
     for text in texts:
         return ('\n"{}"'.format(text.description))
-        # print(textbox)
 
-        # print(save_textlist)
-        # with open('save_textlist.pkl','wb')as f:
-        #    pickle.dump(save_textlist,f)
+def detect_text_fortext(path):
+    from google.cloud import vision
+    client = vision.ImageAnnotatorClient()
 
-        # vertices = (['({},{})'.format(vertex.x, vertex.y)
-        #           for vertex in text.bounding_poly.vertices])
+    with io.open(path, 'rb') as image_file:
+        content = image_file.read()
 
-        # print('bounds: {}'.format(','.join(vertices)))
+    image = vision.Image(content=content)
 
-        # with open("textdata.txt", 'a') as f:
-        #    f.write(textbox)
+    response = client.text_detection(image=image)
+    texts = response.text_annotations
+    w = 0
+    global text_number
+    for text in texts:
 
+        textloc = ('\n"{}"'.format(text.description))
+
+        verticesX = (['{}'.format(vertex.x) for vertex in text.bounding_poly.vertices])
+        verticesY = (['{}'.format(vertex.y) for vertex in text.bounding_poly.vertices])
+        xlist = [int(i) for i in verticesX]
+        ylist = [int(i) for i in verticesY]
+        xLength = xlist[2] - xlist[0]
+        yLength = ylist[3] - ylist[0]
+        w = w + 1
+        text_number = text_number + 1
+        print(text_number)
+        textlist.append([f'{w}.jpg', [verticesX[0], verticesY[3], xLength, yLength], textloc])
+        print(textlist)
 
 
 
@@ -239,9 +246,9 @@ def makeppt():
     slide = prs.slides.add_slide(blank_slide_layout)
     shapes = slide.shapes
 
-    for i in range(2, temp_len):
+    for i in range(2, int(text_number)):
 
-        with open( f'./json/Gvidata{i}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
+        with open( f'./text_json/Txtdata{i}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
             contents = file.read()  # string
             data = json.loads(contents)
             x = int (data["location"][0])
@@ -257,17 +264,40 @@ def makeppt():
             height = round((19 * ((h)/H)),4)
             print(left, top, width, height)
 
+            if data['text'] != "":
+                print((data['text']).replace('"', ''))
+                tb = slide.shapes.add_textbox(Cm(left), Cm(top), Cm(width), Cm(height))
+                tf = tb.text_frame
+                tf.text = ''
+                p = tf.add_paragraph()
+                p.text = (data['text']).replace('"', '')
+                p.font.size = Pt(10)
+
+                print("1")
+
+    for i in range(2, temp_len+1):
+        with open( f'./json/Gvidata{i}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
+            contents = file.read()  # string
+            data = json.loads(contents)
+            x = int (data["location"][0])
+            y = int (data["location"][1])
+            w = int (data["location"][2])
+            h = int (data["location"][3])
+
+
+
+            left = round((25 * (x/W)),4)
+            top = round((19 * ((y/H))),4)
+            width = round((25 * ((w)/W)),4)
+            height = round((19 * ((h)/H)),4)
+            print(w)
+
+
             if data['figure'] =="":
                 continue
             else:
-                if data['text'] != "":
-                    print((data['text']).replace('"', ''))
-                    tb = slide.shapes.add_textbox(Cm(left), Cm(top), Cm(width), Cm(height))
-                    tf = tb.text_frame
-                    tf.text = ''
-                    p = tf.add_paragraph()
-                    p.text = (data['text']).replace('"', '')
-                    p.font.size = Pt(10)
+                if data['text'] != '':
+                    continue
                 if data['figure'] == "circle" and data['text'] =="":
                     print(data['figure'])
                     shape = shapes.add_shape(MSO_SHAPE.OVAL, Cm(left), Cm(top), Cm(width), Cm(height))
@@ -287,9 +317,12 @@ def makeppt():
                     shape.fill.background()
                     line = shape.line
                     line.color.rgb = RGBColor(0, 0, 0)
+                if data['figure'] == "unknown":
+                    continue
                 print("1")
 
     prs.save('demo.pptx')
+    '''
     try:
         url = 'https://15zytiytli.execute-api.us-west-2.amazonaws.com/v2/uploadppt'
         files = {'file': open('demo.pptx', 'rb')}
@@ -297,7 +330,7 @@ def makeppt():
         print(r.text)
     except:
         print("fail")
-
+    '''
 #전체 로직
 
 
@@ -307,15 +340,19 @@ client = vision.ImageAnnotatorClient()
 original_number = 0
 textlist = []
 a = []
+xlist =[]
+ylist =[]
 
 temp_len = len(os.listdir('./json/'))
 loadimg(imgurl)
 
-img = cv2.imread('./sample_images/sample_ppt/8.jpg')
+img = cv2.imread('./sample_images/sample_ppt/00000001.jpg')
 H,W,C = img.shape
 
 morphology(img)
-f=0
+f = 0
+
+
 for f in range(len(os.listdir('./sample_images/result/'))):
     image_crop(f'./sample_images/result/{f+1}.jpg', './sample_images/crop/')
     print(f'./sample_images/result/{f+1}.jpg')
@@ -326,7 +363,19 @@ for k in range(len(os.listdir('./sample_images/result/'))):
             dictionary = dict(zip(dict_list, coordinate[k]))
             print(json.dump(dictionary, open('./json/'+ f'Gvidata{k+1}.json', 'w')))
 
-#detect_text
+# detect_text and make text.json
+txt_file_name =('./sample_images/sample_ppt/00000001.jpg')
+
+detect_text_fortext(txt_file_name)
+dict_text_list = ['image_number','location','text']
+print(text_number)
+for l in range (text_number) :
+    text_dictionary = dict(zip(dict_text_list,textlist[l]))
+    print(json.dump(text_dictionary, open('./text_json/'+ f'Txtdata{l+1}.json', 'w')))
+
+
+
+#make dummy text data to classify figure
 for j in range(len(os.listdir('./sample_images/original_result/'))):
     if j == 1:
         continue
@@ -354,7 +403,7 @@ for f in range(len(os.listdir('./json/'))):
             json_data['text'] = a[f-1]  # 해당 텍스트 값을 집어넣기
             print(json.dump(json_data, open('./json/'+ f'Gvidata{f+1}.json', 'w')))  # 수정한 json데이터를 Gvidatak.json파일로 저장
 
-#makeppt
+
 makeppt()
 
 DeleteAllFiles('./sample_images/crop')
@@ -363,4 +412,6 @@ DeleteAllFiles('./sample_images/original_result')
 DeleteAllFiles('./sample_images/result')
 DeleteAllFiles('./sample_images/sample_ppt')
 DeleteAllFiles('./json')
+DeleteAllFiles('./text_json')
+
 exit()
