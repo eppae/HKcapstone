@@ -31,29 +31,31 @@ function HomeScreen({navigation}) {
   
   const convertPpt = async ()=>{
     console.log(response);
-    
     let asset = response.assets[0];
+    let imgNumber = Math.floor(Math.random() * (10000000000 - 1000000000)) + 1000000000;
+    asset.fileName = imgNumber;
     var photo = {
       uri: asset.uri,
       type: 'multipart/form-data', //asset.type,
-      name: asset.fileName,
+      name: asset.fileName //asset.fileName
     }
     var body = new FormData();
-    body.append('file',photo);
+    body.append('file', photo);
+    body.append('text', asset.fileName);
     
-    let res = await fetch('Upload image API URL',{
+    let res = await fetch('URL',{
       method:'POST',
       body: body,
-      headers: {'content-Type': 'multipart/form-data' }
+      headers: {'content-Type': 'multipart/form-data'},
     })
 
     let result = await res.json();
     console.log(result);
 
-    let convertapi = await fetch('Lambda API'+ asset.fileName,{
+    let convertapi = await fetch('URL'+ asset.fileName,{
       method:'GET',
     })
-
+    
     let convert =await convertapi.json();
     console.log(convert);
   }

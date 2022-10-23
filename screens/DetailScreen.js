@@ -6,7 +6,7 @@ function DetailScreen({route}) {
   const downloadppt = async () => {
     try{
 
-      let res = await fetch('PPT download URL', {
+      let res = await fetch('URL', {
         method: 'GET'
       })
       let result = await res.json();
