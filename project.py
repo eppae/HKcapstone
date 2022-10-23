@@ -18,7 +18,7 @@ from PIL import Image
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="root-amulet-358418-f65fae9b5f90.json"
 
 text_number = 0
-
+result_number=0
 
 def DeleteAllFiles(filePath):
     if os.path.exists(filePath):
@@ -37,11 +37,12 @@ def loadimg(url):
     download_url = responselist['body']['URL']
     download_image = requests.get(download_url)
 
-    photo = open('./sample_images/sample_ppt/8.jpg', 'wb')
+    photo = open('/tmp/sample.jpg', 'wb')
     photo.write(download_image.content)
     photo.close
 
 def morphology(image):
+    global result_number
     k = 0
     blur = cv2.GaussianBlur(img, (5, 5), 0)
     imgray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
@@ -100,7 +101,7 @@ def morphology(image):
         if w * h < 900:
             continue
         k = k + 1
-
+        result_number = result_number + 1
 
         coordinate.append([f'{k}.jpg', [x, y, w, h]])
         print(coordinate)
@@ -112,8 +113,8 @@ def morphology(image):
         cropped_image = erode2[y:y + h, x:x + w]
         original_image = imgray[y: y + h, x: x + w]
         resize = cv2.resize(cropped_image, dsize=(28,28), interpolation=cv2.INTER_AREA)
-        cv2.imwrite(f'./sample_images/original_result/{k}.jpg',original_image)
-        cv2.imwrite(f'./sample_images/result/{k}.jpg', resize)
+        cv2.imwrite(f'/tmp/original_result{k}.jpg', original_image)
+        cv2.imwrite(f'/tmp/result{k}.jpg', resize)
 
 
 
@@ -192,8 +193,9 @@ def detect_text_fortext(path):
 
 
 def detect_figure():
-    for f in range(len(os.listdir('./sample_images/result/'))):
-        im = cv2.imread(f'./sample_images/result/{f + 1}.jpg')
+    global result_number
+    for f in range(result_number):
+        im = cv2.imread(f'/tmp/result{f + 1}.jpg')
 
         imgray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
 
@@ -236,7 +238,7 @@ def detect_figure():
                 coordinate[f].append("")
                 coordinate[f].append("unknown")
                 break
-        cv2.imwrite(f'./sample_images/approx/{f + 1}.jpg', im)
+        cv2.imwrite(f'/tmp/approx{f + 1}.jpg', im)
 
 def makeppt():
     prs = Presentation()
@@ -249,7 +251,7 @@ def makeppt():
 
     for i in range(2, int(text_number)+1):
 
-        with open( f'./text_json/Txtdata{i}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
+        with open(f'/tmp/Txtdata{i}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
             contents = file.read()  # string
             data = json.loads(contents)
             x = int (data["location"][0])
@@ -276,8 +278,8 @@ def makeppt():
                 p.font.size = Pt(10)
                 p.font.name = '맑은 고딕'
 
-    for e in range(2, (temp_len)+1):
-        with open( f'./json/Gvidata{e}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
+    for e in range(2, result_number+1):
+        with open(f'/tmp/Gvidata{e}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
             contents = file.read()  # string
             data = json.loads(contents)
             x = int (data["location"][0])
@@ -319,17 +321,17 @@ def makeppt():
                     line.color.rgb = RGBColor(0, 0, 0)
                 if data['figure'] == "unknown":
                     continue
+    print("완료")
+    prs.save('/tmp/demo.pptx')
 
-    prs.save('demo.pptx')
-    '''
     try:
         url = 'https://15zytiytli.execute-api.us-west-2.amazonaws.com/v2/uploadppt'
-        files = {'file': open('demo.pptx', 'rb')}
+        files = {'file': open('/tmp/demo.pptx', 'rb')}
         r = requests.post(url, files=files)
         print(r.text)
     except:
         print("fail")
-    '''
+
 #전체 로직
 
 
@@ -345,43 +347,42 @@ f = 0
 
 loadimg(imgurl)
 
-img = cv2.imread('./sample_images/sample_ppt/3.jpg')
+img = cv2.imread('/tmp/sample.jpg')
 H,W,C = img.shape
 
 morphology(img)
-temp_len = len(os.listdir('./json/'))
 
-for f in range(len(os.listdir('./sample_images/result/'))):
-    image_crop(f'./sample_images/result/{f+1}.jpg', './sample_images/crop/')
-    print(f'./sample_images/result/{f+1}.jpg')
+for f in range(result_number):
+    image_crop(f'/tmp/result{f + 1}.jpg', '/tmp/')
+    print(f'/tmp/result/{f + 1}.jpg')
 
 detect_figure()
 
 dict_list = ['image_number','location','text','figure']
-for k in range(len(os.listdir('./sample_images/result/'))):
+for k in range(result_number):
             dictionary = dict(zip(dict_list, coordinate[k]))
-            print(json.dump(dictionary, open('./json/'+ f'Gvidata{k+1}.json', 'w')))
+            print(json.dump(dictionary, open('/tmp/' + f'Gvidata{k + 1}.json', 'w')))
 
 
 
 # detect_text and make text.json
-txt_file_name =('./sample_images/sample_ppt/3.jpg')
+txt_file_name =('/tmp/sample.jpg')
 detect_text_fortext(txt_file_name)
 
 dict_text_list = ['image_number','location','text']
 print(text_number)
 for l in range (text_number) :
     text_dictionary = dict(zip(dict_text_list,textlist[l]))
-    print(json.dump(text_dictionary, open('./text_json/'+ f'Txtdata{l+1}.json', 'w')))
+    print(json.dump(text_dictionary, open('/tmp/' + f'Txtdata{l + 1}.json', 'w')))
 
 
 
 #make dummy text data to classify figure
-for j in range(len(os.listdir('./sample_images/original_result/'))):
+for j in range(result_number):
     if j == 1:
         continue
     else:
-        file_name =f'./sample_images/original_result/{j+1}.jpg'
+        file_name =f'/tmp/original_result{j + 1}.jpg'
         #print(file_name)
         detect_text(file_name)
 
@@ -392,28 +393,29 @@ for j in range(len(os.listdir('./sample_images/original_result/'))):
             a.append(detect_text(file_name))
         print(a)
 
-for f in range(len(os.listdir('./json/'))):
+for f in range(result_number):
     if f == 1:
         continue
     else:
-        with open(f'./json/Gvidata{f+1}.json', 'r', encoding='utf-8') as file:
+        with open(f'/tmp/Gvidata{f + 1}.json', 'r', encoding='utf-8') as file:
 
             json_data = json.load(file)
             print(json_data)
             print(len(a))
             json_data['text'] = a[f-1]  # 해당 텍스트 값을 집어넣기
-            print(json.dump(json_data, open('./json/'+ f'Gvidata{f+1}.json', 'w')))  # 수정한 json데이터를 Gvidatak.json파일로 저장
+            print(json.dump(json_data, open('/tmp/' + f'Gvidata{f + 1}.json', 'w')))  # 수정한 json데이터를 Gvidatak.json파일로 저장
 
 
 makeppt()
-
+'''
 DeleteAllFiles('./sample_images/crop')
 DeleteAllFiles('./sample_images/approx')
 DeleteAllFiles('./sample_images/original_result')
 DeleteAllFiles('./sample_images/result')
 DeleteAllFiles('./json')
 DeleteAllFiles('./text_json')
-
+'''
 exit()
+
 
 
