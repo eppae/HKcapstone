@@ -7,9 +7,10 @@ import json
 import requests
 
 import cv2
-from pptx.util import Inches, Cm, Pt
+from pptx.util import Inches,Mm, Cm, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
+from pptx.enum.text import MSO_AUTO_SIZE,MSO_VERTICAL_ANCHOR
 from pptx import Presentation
 from google.cloud import vision
 from PIL import Image
@@ -180,12 +181,12 @@ def detect_text_fortext(path):
         verticesY = (['{}'.format(vertex.y) for vertex in text.bounding_poly.vertices])
         xlist = [int(i) for i in verticesX]
         ylist = [int(i) for i in verticesY]
-        xLength = xlist[2] - xlist[0]
-        yLength = ylist[3] - ylist[0]
+        xLength = xlist[1] - xlist[3]
+        yLength = ylist[2] - ylist[0]
         w = w + 1
         text_number = text_number + 1
         print(text_number)
-        textlist.append([f'{w}.jpg', [verticesX[0], verticesY[3], xLength, yLength], textloc])
+        textlist.append([f'{w}.jpg', [verticesX[3], verticesY[2], xLength, yLength], textloc])
         print(textlist)
 
 
@@ -246,7 +247,7 @@ def makeppt():
     slide = prs.slides.add_slide(blank_slide_layout)
     shapes = slide.shapes
 
-    for i in range(2, int(text_number)):
+    for i in range(2, int(text_number)+1):
 
         with open( f'./text_json/Txtdata{i}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
             contents = file.read()  # string
@@ -258,25 +259,25 @@ def makeppt():
 
 
 
-            left = round((25 * (x/W)),4)
-            top = round((19 * ((y/H))),4)
-            width = round((25 * ((w)/W)),4)
-            height = round((19 * ((h)/H)),4)
+            left = 250 * (x/W)
+            top = 190 * (y/H)
+            width = 250 * (w/W)
+            height = 190 * (h/H)
             print(left, top, width, height)
 
             if data['text'] != "":
                 print((data['text']).replace('"', ''))
-                tb = slide.shapes.add_textbox(Cm(left), Cm(top), Cm(width), Cm(height))
+                tb = slide.shapes.add_textbox(Mm(left), Mm(top), Mm(width), Mm(height))
                 tf = tb.text_frame
-                tf.text = ''
+                tf.text = ""
+                tf.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
                 p = tf.add_paragraph()
                 p.text = (data['text']).replace('"', '')
                 p.font.size = Pt(10)
+                p.font.name = '맑은 고딕'
 
-                print("1")
-
-    for i in range(2, temp_len+1):
-        with open( f'./json/Gvidata{i}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
+    for e in range(2, (temp_len)+1):
+        with open( f'./json/Gvidata{e}.json', 'r', encoding='UTF8') as file:  # k번째 Gvidata.json을 json_data로읽어들인다
             contents = file.read()  # string
             data = json.loads(contents)
             x = int (data["location"][0])
@@ -286,40 +287,38 @@ def makeppt():
 
 
 
-            left = round((25 * (x/W)),4)
-            top = round((19 * ((y/H))),4)
-            width = round((25 * ((w)/W)),4)
-            height = round((19 * ((h)/H)),4)
-            print(w)
+            left = 250 * (x/W)
+            top = 190 * (y/H)
+            width = 250 * (w/W)
+            height = 190 * (h/H)
 
 
             if data['figure'] =="":
                 continue
             else:
-                if data['text'] != '':
-                    continue
-                if data['figure'] == "circle" and data['text'] =="":
+                if data['text'] != "":
+                    print("pass text")
+                if data['figure'] == "circle" and data['text'] == "":
                     print(data['figure'])
-                    shape = shapes.add_shape(MSO_SHAPE.OVAL, Cm(left), Cm(top), Cm(width), Cm(height))
+                    shape = shapes.add_shape(MSO_SHAPE.OVAL, Mm(left), Mm(top), Mm(width), Mm(height))
                     shape.fill.background()
                     line = shape.line
                     line.color.rgb = RGBColor(0, 0, 0)
 
-                if data['figure'] == "square" and data['text'] =="":
+                if data['figure'] == "square" and data['text'] == "":
                     print(data['figure'])
-                    shape = shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Cm(left), Cm(top), Cm(width), Cm(height))
+                    shape = shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Mm(left), Mm(top), Mm(width), Mm(height))
                     shape.fill.background()
                     line = shape.line
                     line.color.rgb = RGBColor(0, 0, 0)
-                if data['figure'] == "triangle" and data['text'] =="":
+                if data['figure'] == "triangle" and data['text'] == "":
                     print(data['figure'])
-                    shape = shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE, Cm(left), Cm(top), Cm(width), Cm(height))
+                    shape = shapes.add_shape(MSO_SHAPE.ISOSCELES_TRIANGLE, Mm(left), Mm(top), Mm(width), Mm(height))
                     shape.fill.background()
                     line = shape.line
                     line.color.rgb = RGBColor(0, 0, 0)
                 if data['figure'] == "unknown":
                     continue
-                print("1")
 
     prs.save('demo.pptx')
     '''
@@ -342,31 +341,33 @@ textlist = []
 a = []
 xlist =[]
 ylist =[]
+f = 0
 
-temp_len = len(os.listdir('./json/'))
 loadimg(imgurl)
 
-img = cv2.imread('./sample_images/sample_ppt/00000001.jpg')
+img = cv2.imread('./sample_images/sample_ppt/3.jpg')
 H,W,C = img.shape
 
 morphology(img)
-f = 0
-
+temp_len = len(os.listdir('./json/'))
 
 for f in range(len(os.listdir('./sample_images/result/'))):
     image_crop(f'./sample_images/result/{f+1}.jpg', './sample_images/crop/')
     print(f'./sample_images/result/{f+1}.jpg')
 
 detect_figure()
+
 dict_list = ['image_number','location','text','figure']
 for k in range(len(os.listdir('./sample_images/result/'))):
             dictionary = dict(zip(dict_list, coordinate[k]))
             print(json.dump(dictionary, open('./json/'+ f'Gvidata{k+1}.json', 'w')))
 
-# detect_text and make text.json
-txt_file_name =('./sample_images/sample_ppt/00000001.jpg')
 
+
+# detect_text and make text.json
+txt_file_name =('./sample_images/sample_ppt/3.jpg')
 detect_text_fortext(txt_file_name)
+
 dict_text_list = ['image_number','location','text']
 print(text_number)
 for l in range (text_number) :
@@ -405,13 +406,14 @@ for f in range(len(os.listdir('./json/'))):
 
 
 makeppt()
-
+'''
 DeleteAllFiles('./sample_images/crop')
 DeleteAllFiles('./sample_images/approx')
 DeleteAllFiles('./sample_images/original_result')
 DeleteAllFiles('./sample_images/result')
-DeleteAllFiles('./sample_images/sample_ppt')
 DeleteAllFiles('./json')
 DeleteAllFiles('./text_json')
-
+'''
 exit()
+
+
