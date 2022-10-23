@@ -406,14 +406,14 @@ for f in range(len(os.listdir('./json/'))):
 
 
 makeppt()
-'''
+
 DeleteAllFiles('./sample_images/crop')
 DeleteAllFiles('./sample_images/approx')
 DeleteAllFiles('./sample_images/original_result')
 DeleteAllFiles('./sample_images/result')
 DeleteAllFiles('./json')
 DeleteAllFiles('./text_json')
-'''
+
 exit()
 
 
